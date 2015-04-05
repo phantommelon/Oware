@@ -16,11 +16,17 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * {Insert Description of Class ScannerTest Here}
@@ -30,30 +36,54 @@ import java.util.Scanner;
  */
 public class ScannerTest {
 
-    private Scanner in;
+    private BufferedReader br;
+    private InputStream in;
     
     public ScannerTest() {
-        in = new Scanner(System.in);
+        this.in = System.in;
     }
     
     public ScannerTest(InputStream in) {
-        this.in = new Scanner(in);
+        this.in = in;
+        br = new BufferedReader(new InputStreamReader(in));
     }
     
     public void run() {
         
-        String data = in.nextLine();
+        String data = null;
+        try {
+            data = br.readLine();
+        } 
+        catch (IOException ex) {
+            Logger.getLogger(ScannerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
         System.out.println(data);
+        
+        System.out.println("NEW Human Human\n1\n2\n");
+    }
+    
+    public void run2() {
+        try {
+            System.out.println(in.read());
+        }
+        catch(IOException ex) {
+            
+        }
     }
     
     public static void main(String[] args) throws FileNotFoundException {
         
         ScannerTest test = new ScannerTest(new FileInputStream(
                 new File("test.txt")));
-        
-        for(int i = 0; i < 15; i++) {
-            test.run();
+        try {
+            while(test.br.ready()) {
+                test.run();
+            }
+        } 
+        catch (IOException ex) {
+            Logger.getLogger(ScannerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
+ 
     }
 }

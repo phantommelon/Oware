@@ -21,6 +21,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.List;
+import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -35,29 +36,35 @@ public class HumanPlayer implements Player, Serializable {
     private InputStream input;
     private PrintStream output;
     private String name;
+    private Scanner in;
     
     public HumanPlayer() {
         input = System.in;
         output = System.out;
         name = "Player";
+        in = new Scanner(input);
     }
 
     HumanPlayer(String name) {
         this.name = name;
+        input = System.in;
+        output = System.out;
+        in = new Scanner(input);
     }
     
     @Override
     public int getMove(Board b, int playerNum) throws QuitGameException {
         
         int move = 0;
-        BufferedReader in = new BufferedReader(new InputStreamReader(input));
         
         output.print("Please enter a house number to make a move or QUIT to " +
                 "return to the main menu: ");
         
+        String data = in.nextLine();
+        
         while(move == 0) {
             try {
-                move = Integer.parseInt(in.readLine());
+                move = Integer.parseInt(data);
                 return move;
             }
             catch(NumberFormatException nfe) {
@@ -90,10 +97,6 @@ public class HumanPlayer implements Player, Serializable {
                     throw new IllegalArgumentException("Invalid input - " +
                             "Please enter a value from 1 to 6 (inclusive).");
                 }
-                
-            }
-            catch(IOException ex) {
-                output.println("Something went wrong, please try again.\n");
             }
         }
 
@@ -108,6 +111,7 @@ public class HumanPlayer implements Player, Serializable {
     @Override
     public void setIn(InputStream in) {
         this.input = in;
+        this.in = new Scanner(in);
     }
 
     @Override

@@ -16,7 +16,10 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -41,15 +44,15 @@ import java.util.logging.Logger;
  * The GameManagerImpl allows users to start, load, save and play games.
  * 
  * @author Alistair Madden
- * @version 0.2
+ * @version 0.3
  */
 public class GameManagerImpl implements GameManager, Serializable {
     
-    Game game;
-    boolean inMainMenu;
-    String mainMenu;
-    InputStream in;
-    PrintStream out;
+    private Game game;
+    private boolean inMainMenu;
+    private String mainMenu;
+    private InputStream in;
+    private PrintStream out;
     
     
     public GameManagerImpl() {
@@ -141,10 +144,24 @@ public class GameManagerImpl implements GameManager, Serializable {
     @Override
     public Game manage(InputStream in, PrintStream out) {
         
+//        try {
+//            this.fIn = (FileInputStream) in;
+//        }
+//        // Not a FileInputStream.
+//        catch(ClassCastException cce) {
         this.in = in;
-        this.out = out;
+//        }
         
-        BufferedReader input = new BufferedReader(new InputStreamReader(in));
+        this.out = out;
+
+        Scanner input;
+        
+//        if(fIn != null) {
+//            input = new Scanner(fIn);
+//        }
+//        else {
+            input = new Scanner(in);
+//        }
         
         int result = -1;
         
@@ -157,19 +174,10 @@ public class GameManagerImpl implements GameManager, Serializable {
             out.println(mainMenu);
             out.print("Please enter a command: ");
 
-            // Prepare to receive Strings from BufferedReader.
-            List<String> commands = null;
-
-            try {
-                // Read the contents of the BufferedReader after the user
-                // has entered the command by way of carriage return.
-                commands = Arrays.asList(input.readLine().split(" "));
-            }
-            catch (IOException ex) {
-                out.println("General I/O exception: " + ex.getMessage());
-                out.println("Please try again.");
-                break;
-            }
+            String command = input.nextLine();
+            
+            // Split string from input around a space character.
+            List<String> commands = Arrays.asList(command.split(" "));
             
             switch(commands.get(0)) {
                 
@@ -286,10 +294,6 @@ public class GameManagerImpl implements GameManager, Serializable {
                 throw ex;
             }
             
-            // Will have definitely created a player when this code is reached.
-            players[0].setIn(in);
-            players[0].setOut(out);
-            
             // Player2 creation
             if(player2.length == 1) {
                 if(player2[0].equals("Human")) {
@@ -317,7 +321,23 @@ public class GameManagerImpl implements GameManager, Serializable {
                 throw ex;
             }
             
+            // Will have definitely created a player when this code is reached.
+//            if(fIn != null) {
+//                try {
+//                    fIn.getChannel().position(0);
+//                    players[0].setIn(fIn);
+//                    players[1].setIn(fIn);
+//                } 
+//                catch (IOException ex1) {
+//                    Logger.getLogger(GameManagerImpl.class.getName()).log(Level.SEVERE, null, ex1);
+//                }
+//            }
+//            else { 
+//            }
+            
+            players[0].setIn(in);
             players[1].setIn(in);
+            players[0].setOut(out);
             players[1].setOut(out);
             
             Game newGame = new GameImpl(players[0], players[1]);
@@ -356,8 +376,12 @@ public class GameManagerImpl implements GameManager, Serializable {
         
         else {
             
+//            gameManager.manage(System.in, System.out);
+            
             gameManager.manage(new FileInputStream(new File("test.txt")),
                     System.out);
+            
+            
             
         }
     }
