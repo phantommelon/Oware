@@ -35,18 +35,9 @@ public class HumanPlayer implements Player, Serializable {
 
     private InputStream input;
     private PrintStream output;
-    private String name;
     private Scanner in;
     
     public HumanPlayer() {
-        input = System.in;
-        output = System.out;
-        name = "Player";
-        in = new Scanner(input);
-    }
-
-    HumanPlayer(String name) {
-        this.name = name;
         input = System.in;
         output = System.out;
         in = new Scanner(input);
@@ -119,13 +110,4 @@ public class HumanPlayer implements Player, Serializable {
         this.output = out;
     }
     
-    /**
-     * A method to return the name associated with this player object.
-     * 
-     * @return the player's name as a string
-     */
-    public String getName() {
-        return name;
-    }
-
 }

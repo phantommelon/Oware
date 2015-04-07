@@ -30,6 +30,8 @@ public class GameImpl implements Game, Serializable {
 
     private Player player1;
     private Player player2;
+    private String player1Name;
+    private String player2Name;
     private byte turn;
     private BoardImpl board;
     private List<Board> previousBoards;
@@ -178,47 +180,6 @@ public class GameImpl implements Game, Serializable {
         
         return output;
     }
-    
-    /**
-     * Generates a string representation of the specified player's name.
-     * 
-     * @param playerNum The number of the <code>Player</code> in the context of
-     * the current game.
-     * 
-     * @return a <code>String</code> object containing the player's name.
-     */
-    public String getPlayerName(byte playerNum) {
-        
-        String playerName;
-        
-        if(playerNum == 1) {
-            if(!player1.isComputer()) {
-                HumanPlayer player1H = (HumanPlayer) player1;
-                playerName = player1H.getName();
-            }
-            else {
-                ComputerPlayer player1C = (ComputerPlayer) player1;
-                playerName = player1C.getName();
-            }
-        }
-        else {
-            if(!player2.isComputer()) {
-                HumanPlayer player2H = (HumanPlayer) player2;
-                playerName = player2H.getName();
-            }
-            else {
-                ComputerPlayer player2C = (ComputerPlayer) player2;
-                playerName = player2C.getName();
-            }
-        }
-        
-        // Default value given if no name specified on instantiation.
-        if(playerName.equals("Player") || playerName.equals("Computer")) {
-            playerName += " " + playerNum;
-        }
-        
-        return playerName;
-    }
 
     /**
      * Captures all seeds in houses and adds to the house owner's score.
@@ -260,5 +221,45 @@ public class GameImpl implements Game, Serializable {
         }
         return true;
     }
+
+    /**
+     * Returns a string representation of the specified player's name.
+     * 
+     * @param playerNum The number of the <code>Player</code> in the context of
+     * the current game.
+     * 
+     * @return a <code>String</code> object containing the player's name.
+     */
+    public String getPlayerName(int playerNum) {
+        if(playerNum == 1) {
+            return player1Name;
+        }
+        else if(playerNum == 2) {
+            return player2Name;
+        }
+        else {
+            throw new IllegalArgumentException("Invalid player number!");
+        }
+    }
+
+    /**
+     * Sets the specified player's name to the value provided.
+     * 
+     * @param playerNum the number of the <code>Player</code> in the context of
+     * the current game.
+     * @param playerName a String to assign to the player.
+     */
+    public void setPlayerName(int playerNum, String playerName) {
+        if(playerNum == 1) {
+            this.player1Name = playerName;
+        }
+        else if(playerNum == 2) {
+            this.player2Name = playerName;
+        }
+        else {
+            throw new IllegalArgumentException("Invalid player number!");
+        }
+    }
+    
     
 }

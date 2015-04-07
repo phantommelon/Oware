@@ -262,60 +262,32 @@ public class GameManagerImpl implements GameManager, Serializable {
                 "player. Optionally a colon may be added after the player " + 
                 "type to give a name to the player.\n");
         
+        String[] player1;
+        String[] player2;
+        Player[] players;
+        
         if(commands.size() == 3) {
-            String[] player1 = commands.get(1).split(":");
-            String[] player2 = commands.get(2).split(":");
-            Player[] players = new Player[2];
+            player1 = commands.get(1).split(":");
+            player2 = commands.get(2).split(":");
+            players = new Player[2];
             
             // Player1 creation.
-            if(player1.length == 1) {
-                if(player1[0].equals("Human")) {
-                    players[0] = new HumanPlayer();
-                }
-                else if(player1[0].equals("Computer")) {
-                    players[0] = new ComputerPlayer();
-                }
-                else {
-                    throw ex;
-                }
+            if(player1[0].equals("Human")) {
+                players[0] = new HumanPlayer();
             }
-            else if(player1.length == 2) {
-                if(player1[0].equals("Human")) {
-                    players[0] = new HumanPlayer(player1[1]);
-                }
-                else if(player1[0].equals("Computer")) {
-                    players[0] = new ComputerPlayer(player1[1]);
-                }
-                else {
-                    throw ex;
-                }
+            else if(player1[0].equals("Computer")) {
+                players[0] = new ComputerPlayer();
             }
             else {
                 throw ex;
             }
             
             // Player2 creation
-            if(player2.length == 1) {
-                if(player2[0].equals("Human")) {
-                    players[1] = new HumanPlayer();
-                }
-                else if(player2[0].equals("Computer")) {
-                    players[1] = new ComputerPlayer();
-                }
-                else {
-                    throw ex;
-                }
+            if(player2[0].equals("Human")) {
+                players[1] = new HumanPlayer();
             }
-            else if(player2.length == 2) {
-                if(player2[0].equals("Human")) {
-                    players[1] = new HumanPlayer(player2[1]);
-                }
-                else if(player2[0].equals("Computer")) {
-                    players[1] = new ComputerPlayer(player2[1]);
-                }
-                else {
-                    throw ex;
-                }
+            else if(player2[0].equals("Computer")) {
+                players[1] = new ComputerPlayer();
             }
             else {
                 throw ex;
@@ -340,7 +312,9 @@ public class GameManagerImpl implements GameManager, Serializable {
             players[0].setOut(out);
             players[1].setOut(out);
             
-            Game newGame = new GameImpl(players[0], players[1]);
+            GameImpl newGame = new GameImpl(players[0], players[1]);
+            newGame.setPlayerName(1, player1[1]);
+            newGame.setPlayerName(2, player2[1]);
             return newGame;
         }
         else {
