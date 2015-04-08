@@ -49,11 +49,10 @@ import java.util.logging.Logger;
 public class GameManagerImpl implements GameManager, Serializable {
     
     private Game game;
-    private boolean inMainMenu;
     private String mainMenu;
     private InputStream in;
     private PrintStream out;
-    
+    private Scanner scanner;
     
     public GameManagerImpl() {
         
@@ -99,26 +98,8 @@ public class GameManagerImpl implements GameManager, Serializable {
     }
 
     @Override
-    public void saveGame(String fname) throws FileFailedException {
-        
-        File fileInfo = new File(fname);
-        
-        if(fileInfo.exists()) {
-            throw new FileFailedException("File already exists.");
-        }
-        else {
-            
-            try {
-                ObjectOutputStream output = new ObjectOutputStream(
-                        new FileOutputStream(fileInfo));
-                output.writeObject(game);
-                output.flush();
-                output.close();
-            } 
-            catch (IOException ex) {
-                throw new FileFailedException("Something went wrong.");
-            }
-        }
+    public void saveGame(String fname) {
+        out.println(game.getCurrentBoard().toString());
     }
 
     @Override
@@ -154,14 +135,7 @@ public class GameManagerImpl implements GameManager, Serializable {
         
         this.out = out;
 
-        Scanner input;
-        
-//        if(fIn != null) {
-//            input = new Scanner(fIn);
-//        }
-//        else {
-            input = new Scanner(in);
-//        }
+        scanner = new Scanner(in);
         
         int result = -1;
         
@@ -174,67 +148,119 @@ public class GameManagerImpl implements GameManager, Serializable {
             out.println(mainMenu);
             out.print("Please enter a command: ");
 
-            String command = input.nextLine();
+            String command = "";
             
+            command = scanner.nextLine();
+                
             // Split string from input around a space character.
             List<String> commands = Arrays.asList(command.split(" "));
             
-            switch(commands.get(0)) {
-                
-                case "NEW": {
-                    
-                    try {
-                        this.game = createNewGame(commands);
-                    }
-                    catch(IllegalArgumentException ex) {
-                        out.println(ex.getMessage());
+            command = commands.get(0);
+            
+            if(command.equals("NEW")) {
+                try {
+                    this.game = createNewGame(commands);
+                }
+                catch(IllegalArgumentException ex) {
+                    out.println(ex.getMessage());
+                    continue;
+                }
+
+                try {
+                    result = playGame();
+                }
+                catch(QuitGameException qge) {
+
+                    out.println("\n" + qge.getMessage() + "\n");
+
+                    if(!qge.getMessage().contains("Game over")) {
                         continue;
                     }
+                }
 
-                    try {
-                        result = playGame();
-                    }
-                    catch(QuitGameException qge) {
-                        
-                        out.println("\n" + qge.getMessage() + "\n");
-                        
-                        if(!qge.getMessage().contains("Game over")) {
-                            continue;
-                        }
-                    }
-
-                    if(result != 0) {
-                        out.println("Player " + result + " is the winner!\n");
-                    }
-                    else if(result == 0) {
-                        out.println("The game was a draw!\n");
-                    }
-                    else {
-                        out.println("Something really bad has happened. Help!");
-                    }
+                if(result != 0) {
+                    out.println("Player " + result + " is the winner!\n");
+                    result = -1;
                 }
-                    
-                
-                case "LOAD": {
-                    throw new UnsupportedOperationException("Not supported " +
-                            "yet.");
+                else if(result == 0) {
+                    out.println("The game was a draw!\n");
+                    result = -1;
                 }
-                    
-                    
-                case "SAVE": {
-                    throw new UnsupportedOperationException("Not supported " +
-                            "yet.");
-                }
-                
-                case "EXIT": {
-                    System.exit(0);
-                }
-                
-                default: {
-                    out.println("Invalid input - valid commands are listed " +
-                            "in the main menu.\n");
+                else {
+                    out.println("Something really bad has happened. Help!");
                 }
             }
+            else if(command.equals("LOAD")) {
+                throw new UnsupportedOperationException("Not supported " +
+                        "yet.");
+            }
+            else if(command.equals("SAVE")) {
+                saveGame(command);
+            }
+            else if(command.equals("EXIT")) {
+                System.exit(0);
+            }
+            else {
+                out.println("Invalid input - valid commands are listed " +
+                        "in the main menu.\n");
+            }
+            
+//            switch(commands.get(0)) {
+//                
+//                case "NEW": {
+//                    
+//                    try {
+//                        this.game = createNewGame(commands);
+//                    }
+//                    catch(IllegalArgumentException ex) {
+//                        out.println(ex.getMessage());
+//                        continue;
+//                    }
+//
+//                    try {
+//                        result = playGame();
+//                    }
+//                    catch(QuitGameException qge) {
+//                        
+//                        out.println("\n" + qge.getMessage() + "\n");
+//                        
+//                        if(!qge.getMessage().contains("Game over")) {
+//                            continue;
+//                        }
+//                    }
+//
+//                    if(result != 0) {
+//                        out.println("Player " + result + " is the winner!\n");
+//                    }
+//                    else if(result == 0) {
+//                        out.println("The game was a draw!\n");
+//                    }
+//                    else {
+//                        out.println("Something really bad has happened. Help!");
+//                    }
+//                }
+//                    
+//                
+//                case "LOAD": {
+//                    throw new UnsupportedOperationException("Not supported " +
+//                            "yet.");
+//                }
+//                    
+//                    
+//                case "SAVE": {
+//                    throw new UnsupportedOperationException("Not supported " +
+//                            "yet.");
+//                }
+//                
+//                case "EXIT": {
+//                    System.exit(0);
+//                }
+//                
+//                default: {
+//                    out.println("Invalid input - valid commands are listed " +
+//                            "in the main menu.\n");
+//                }
+//            }
         }
             
         return this.game;
@@ -273,7 +299,10 @@ public class GameManagerImpl implements GameManager, Serializable {
             
             // Player1 creation.
             if(player1[0].equals("Human")) {
-                players[0] = new HumanPlayer();
+                HumanPlayer hp = new HumanPlayer();
+                // TODO remove.
+                hp.setReader(scanner);
+                players[0] = hp;
             }
             else if(player1[0].equals("Computer")) {
                 players[0] = new ComputerPlayer();
@@ -284,7 +313,10 @@ public class GameManagerImpl implements GameManager, Serializable {
             
             // Player2 creation
             if(player2[0].equals("Human")) {
-                players[1] = new HumanPlayer();
+                HumanPlayer hp = new HumanPlayer();
+                // TODO remove.
+                hp.setReader(scanner);
+                players[1] = hp;
             }
             else if(player2[0].equals("Computer")) {
                 players[1] = new ComputerPlayer();
@@ -293,7 +325,8 @@ public class GameManagerImpl implements GameManager, Serializable {
                 throw ex;
             }
             
-            // Will have definitely created a player when this code is reached.
+            
+                // Will have definitely created a player when this code is reached.
 //            if(fIn != null) {
 //                try {
 //                    fIn.getChannel().position(0);
@@ -307,14 +340,24 @@ public class GameManagerImpl implements GameManager, Serializable {
 //            else { 
 //            }
             
-            players[0].setIn(in);
-            players[1].setIn(in);
+//            players[0].setIn(in);
+//            players[0].
+//            players[1].setIn(in);
             players[0].setOut(out);
             players[1].setOut(out);
             
             GameImpl newGame = new GameImpl(players[0], players[1]);
-            newGame.setPlayerName(1, player1[1]);
-            newGame.setPlayerName(2, player2[1]);
+
+            // Assigning player names.
+            if(player1.length == 1) {
+                newGame.setPlayerName(1, "Player");
+                newGame.setPlayerName(2, "Player");
+            }
+            else {
+                newGame.setPlayerName(1, player1[1]);
+                newGame.setPlayerName(2, player2[1]);
+            }
+            
             return newGame;
         }
         else {
@@ -323,6 +366,8 @@ public class GameManagerImpl implements GameManager, Serializable {
     }
     
     public static void main(String[] args) throws FileNotFoundException {
+        
+//        System.setIn(new FileInputStream("test.txt"));
         
         GameManagerImpl gameManager = new GameManagerImpl();
         
@@ -349,14 +394,7 @@ public class GameManagerImpl implements GameManager, Serializable {
         }
         
         else {
-            
-//            gameManager.manage(System.in, System.out);
-            
-            gameManager.manage(new FileInputStream(new File("test.txt")),
-                    System.out);
-            
-            
-            
+            gameManager.manage(System.in, System.out);
         }
     }
     

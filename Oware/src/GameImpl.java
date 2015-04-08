@@ -18,6 +18,7 @@
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -37,7 +38,6 @@ public class GameImpl implements Game, Serializable {
     private List<Board> previousBoards;
     private int consecutiveMoves;
     private boolean isFinished;
-    private QuitGameException endGame;
     
     /**
      * Constructor for the GameImpl class.
@@ -54,8 +54,6 @@ public class GameImpl implements Game, Serializable {
         previousBoards = new ArrayList<>();
         consecutiveMoves = 0;
         isFinished = false;
-        endGame = new QuitGameException("Game over! Returning to the main " +
-                "menu...");
     }
     
     /**
@@ -134,18 +132,18 @@ public class GameImpl implements Game, Serializable {
         if(noPossibleMove() || positionRepeated()) {
             captureAllSeeds();
             isFinished = true;
-            throw endGame;
+            return;
         }
         
         else if(consecutiveMoves == 100) {
             isFinished = true;
-            throw endGame;
+            return;
         }
         
         else if(board.getScore(1) > 24 || board.getScore(2) > 24 || 
                 (board.getScore(1) + board.getScore(2)) == 48) {
             isFinished = true;
-            throw endGame;
+            return;
         }
         
         Board previousBoard = board.clone();
@@ -175,8 +173,34 @@ public class GameImpl implements Game, Serializable {
     @Override
     public String toString() {
         String output = new String();
+        output += getPlayerName(1) + ": " + board.getScore(1) + "\n";
+        output += getPlayerName(2) + ": " + board.getScore(2) + "\n";
         output += getPlayerName(turn) + " to play.\n\n";
-        output += board.toString();
+        
+        List<String> houseValues = new ArrayList<>();
+        houseValues = Arrays.asList(board.toString().split(":")[0].split(" "));
+        
+        for(int i = 0; i < 12; i++) {
+            output += "House " + (i+1) + " contains " + houseValues.get(i) + 
+                    " seeds\n";
+        }
+//        output += "_\u03326_\u03325_\u03324_\u03323_\u03322_\u03321_\n";
+//        
+//        for(int i = 0; i < 6; i++) {
+//            output += "|\u0332\u0305" + houseValues.get(i);
+//        }
+//        
+//        output += "|\n";
+//        output += "|-----------|\n";
+//        
+//        for(int i = 6; i < 12; i++) {
+//            output += "|" + houseValues.get(i);
+//        }
+//        
+//        output += "|\n";
+//        output += "-------------\n";
+//        
+//        output += " 1 2 3 4 5 6 \n";
         
         return output;
     }
@@ -250,6 +274,11 @@ public class GameImpl implements Game, Serializable {
      * @param playerName a String to assign to the player.
      */
     public void setPlayerName(int playerNum, String playerName) {
+        
+        if(playerName.equals("Player")) {
+            playerName = "Player " + playerNum;
+        }
+        
         if(playerNum == 1) {
             this.player1Name = playerName;
         }
@@ -261,5 +290,9 @@ public class GameImpl implements Game, Serializable {
         }
     }
     
-    
+    public String toFileString() {
+        String fileString = "";
+        fileString += board.toString();
+        return fileString;
+    }
 }

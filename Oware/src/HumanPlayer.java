@@ -35,12 +35,9 @@ public class HumanPlayer implements Player, Serializable {
 
     private InputStream input;
     private PrintStream output;
-    private Scanner in;
+    private Scanner scanner;
     
     public HumanPlayer() {
-        input = System.in;
-        output = System.out;
-        in = new Scanner(input);
     }
     
     @Override
@@ -50,12 +47,10 @@ public class HumanPlayer implements Player, Serializable {
         
         output.print("Please enter a house number to make a move or QUIT to " +
                 "return to the main menu: ");
-        
-        String data = in.nextLine();
-        
+
         while(move == 0) {
             try {
-                move = Integer.parseInt(data);
+                move = Integer.parseInt(scanner.nextLine());
                 return move;
             }
             catch(NumberFormatException nfe) {
@@ -100,14 +95,18 @@ public class HumanPlayer implements Player, Serializable {
     }
 
     @Override
-    public void setIn(InputStream in) {
-        this.input = in;
-        this.in = new Scanner(in);
+    public void setIn(InputStream input) {
+        this.input = input;
+        this.scanner = new Scanner(input);
     }
 
     @Override
     public void setOut(PrintStream out) {
         this.output = out;
+    }
+    
+    public void setReader(Scanner reader) {
+        this.scanner = reader;
     }
     
 }

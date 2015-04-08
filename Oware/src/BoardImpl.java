@@ -233,9 +233,12 @@ public class BoardImpl implements Board, Serializable {
     public String toString() {
         String description = new String();
         
+        // SeedNumber(House i) : PlayerNumber PlayerScore
         for(int i = 0; i < 12; i++) {
-            description += "House " + (i+1) + " has " + houses[i] + " seeds.\n";
+            description += houses[i] + " ";
         }
+        
+        description += ": " + 1 + " " + p1Score + " " + 2 + " " + p2Score;
         return description;
     }
 

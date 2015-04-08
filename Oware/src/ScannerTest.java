@@ -41,6 +41,7 @@ public class ScannerTest {
     
     public ScannerTest() {
         this.in = System.in;
+        br = new BufferedReader(new InputStreamReader(in));
     }
     
     public ScannerTest(InputStream in) {
@@ -59,8 +60,6 @@ public class ScannerTest {
         }
         
         System.out.println(data);
-        
-        System.out.println("NEW Human Human\n1\n2\n");
     }
     
     public void run2() {
@@ -74,14 +73,21 @@ public class ScannerTest {
     
     public static void main(String[] args) throws FileNotFoundException {
         
-        ScannerTest test = new ScannerTest(new FileInputStream(
+        System.setIn(new FileInputStream(
                 new File("test.txt")));
+        
+        ScannerTest test = new ScannerTest();
+
         try {
             while(test.br.ready()) {
                 test.run();
             }
-        } 
-        catch (IOException ex) {
+        } catch (IOException ex) {
+            Logger.getLogger(ScannerTest.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        try {
+            System.out.println(test.in.available());
+        } catch (IOException ex) {
             Logger.getLogger(ScannerTest.class.getName()).log(Level.SEVERE, null, ex);
         }
  
