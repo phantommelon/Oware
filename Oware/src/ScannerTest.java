@@ -29,7 +29,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- * {Insert Description of Class ScannerTest Here}
+ * A test for Scanners.
  * 
  * @author Alistair Madden
  * @version 0.1

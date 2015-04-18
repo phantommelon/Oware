@@ -47,7 +47,15 @@ public class BoardImpl implements Board, Serializable {
         p2Score = 0;
     }
     
-    private BoardImpl(int[] houses, int p1Score, int p2Score) {
+    /**
+     * Constructor to enable copying of the board.
+     * 
+     * @param houses an array of <code>int</code> representing the seeds in each
+     * house.
+     * @param p1Score player 1's score.
+     * @param p2Score player 2's score.
+     */
+    public BoardImpl(int[] houses, int p1Score, int p2Score) {
         this.houses = houses;
         this.p1Score = p1Score;
         this.p2Score = p2Score;
@@ -233,12 +241,12 @@ public class BoardImpl implements Board, Serializable {
     public String toString() {
         String description = new String();
         
-        // SeedNumber(House i) : PlayerNumber PlayerScore
+        // SeedNumber(House i) : PlayerScore
         for(int i = 0; i < 12; i++) {
             description += houses[i] + " ";
         }
         
-        description += ": " + 1 + " " + p1Score + " " + 2 + " " + p2Score;
+        description += ": " + p1Score + " " + p2Score;
         return description;
     }
 

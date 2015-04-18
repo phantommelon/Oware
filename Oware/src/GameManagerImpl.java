@@ -24,6 +24,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -74,32 +76,125 @@ public class GameManagerImpl implements GameManager, Serializable {
     @Override
     public void loadGame(String fname) throws FileFailedException {
         
-        File fileInfo = new File(fname);
+        File path = new File(fname);
         
-        if(fileInfo.exists()) {
-            ObjectInputStream input;
+        if(path.exists()) {
+           
+            Scanner loadScanner;
+            
             try {
-                input = new ObjectInputStream(new FileInputStream(fileInfo));
+                loadScanner = new Scanner(path);
             } 
-            catch (IOException ex) {
-                throw new FileFailedException("Please try again.");
+            catch (FileNotFoundException ex) {
+                throw new FileFailedException("Failed to load file. Please " +
+                        "try again.\n");
             }
-            try {
-                game = (Game) input.readObject();
-            } 
-            catch (IOException ex) {
-                throw new FileFailedException("Please try again.");
-            } 
-            catch (ClassNotFoundException ex) {
-                throw new FileFailedException("Cannot instantiate class - no " +
-                        "such class exists");
+            
+            List<String> lines = new ArrayList<>();
+            
+            while(loadScanner.hasNextLine()) {
+                lines.add(loadScanner.nextLine());
             }
+            
+            // Fields that need to be determined to recreate game.
+            Board currentBoard = processBoardString(lines.get(0));
+            String player1Type = lines.get(1);
+            String player2Type = lines.get(2);           
+            Player player1;
+            Player player2;
+            Byte turn = Byte.parseByte(lines.get(5));
+            int consecutiveMoves = Integer.parseInt(lines.get(6));
+            boolean gameOver = Boolean.getBoolean(lines.get(7));
+            List<Board> prevousBoards = new ArrayList<>();
+            
+            // Strings needing further analysis.
+            String player1Name = lines.get(3);
+            String player2Name = lines.get(4);
+            String[] previousBoardStrings = lines.get(8).split(";");
+            
+            for(String previousBoard : previousBoardStrings) {
+                prevousBoards.add(processBoardString(previousBoard));
+            }
+
+            if(player1Type.equals("HumanPlayer")) {
+                player1 = new HumanPlayer();
+            }
+            else {
+                player1 = new ComputerPlayer();
+            }
+            
+            if(player2Type.equals("HumanPlayer")) {
+                player2 = new HumanPlayer();
+            }
+            else {
+                player2 = new ComputerPlayer();
+            }
+            
+            player1.setIn(in);
+            player1.setOut(out);
+            player2.setIn(in);
+            player2.setOut(out);
+            
+            this.game = new GameImpl(currentBoard, player1, player2, 
+                    player1Name, player2Name, turn, consecutiveMoves, gameOver, 
+                    prevousBoards);
+        }
+        else {
+            throw new FileFailedException("The file specified does not exist.");
         }
     }
 
     @Override
     public void saveGame(String fname) {
-        out.println(game.getCurrentBoard().toString());
+        
+        if(game == null) {
+            out.println("Invalid input - no game is currently underway.\n");
+        }
+        else if(game.getResult() != -1) {
+            out.println("Invalid input - this game is finished.\n");
+        }
+        else {
+            
+            File path = new File(fname);
+            
+            if(path.exists()) {
+                
+                out.println("File " + fname + " already exists, do you want " +
+                        "to overwrite? (Y/N)");
+                
+                String saveInput;
+                
+                // Check for user input
+                do {
+                    saveInput = scanner.nextLine();
+                    
+                    if(saveInput.equalsIgnoreCase("N")) {
+                        return;
+                    }
+                    else if(saveInput.equalsIgnoreCase("Y")) {
+                        break;
+                    }
+                }
+                while(!(saveInput.equalsIgnoreCase("Y") || 
+                        saveInput.equalsIgnoreCase("N")));
+            }
+            
+            out.println("Saving...");
+            
+            String stringOut = game.toString();
+            
+            try {
+                FileWriter fw = new FileWriter(path);
+                fw.write(stringOut);
+                fw.flush();
+                fw.close();
+            } 
+            catch (IOException ex) {
+                Logger.getLogger(GameManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            
+            out.println("Save successful! Returning to the main menu...\n");   
+        }
     }
 
     @Override
@@ -108,7 +203,40 @@ public class GameManagerImpl implements GameManager, Serializable {
         while(!(game.getResult() == 0 || game.getResult() == 1 ||
                 game.getResult() == 2)) {
             
-            out.println("\n" + game.toString());
+            String gameRep = game.toString();
+            
+            // Splits each line received.
+            String[] reports = gameRep.split(System.getProperty(
+                    "line.separator"));
+            
+            // Board state split house seeds from player score.
+            String[] boardReport = reports[0].split(":");
+            
+            // Contains the seeds remaining in the houses.
+            String[] houseReport = boardReport[0].split(" ");
+            
+            // Contains the score of players (player 1 then player 2).
+            String[] scoreReport = boardReport[1].trim().split(" ");
+            
+            // Contains the player's names.
+            String[] nameReport = Arrays.copyOfRange(reports, 3, 5);
+            
+            // List current scores.
+            for(int i = 0; i < 2; i++) {
+                out.println(nameReport[i] + ": " + scoreReport[i]);
+            }
+            
+            // List player to play.
+            out.println("\n" + nameReport[Integer.parseInt(reports[5]) - 1] +
+                    " to play.\n");
+            
+            // List houses and their seed values.
+            for(int i = 0; i < 12; i++) {
+                out.println("House " + (i+1) + " contains " + houseReport[i] +
+                        " seeds.");
+            }
+            
+            out.println();
             
             try {
                 game.nextMove();
@@ -155,6 +283,7 @@ public class GameManagerImpl implements GameManager, Serializable {
             // Split string from input around a space character.
             List<String> commands = Arrays.asList(command.split(" "));
             
+            // Reusing command.
             command = commands.get(0);
             
             if(command.equals("NEW")) {
@@ -191,11 +320,53 @@ public class GameManagerImpl implements GameManager, Serializable {
                 }
             }
             else if(command.equals("LOAD")) {
-                throw new UnsupportedOperationException("Not supported " +
-                        "yet.");
+                
+                if(checkValidIOCommand(commands)) {
+                    try {
+                        loadGame(commands.get(1));
+                    } catch (FileFailedException ex) {
+                        out.println(ex.getMessage() + "\n");
+                    }
+                }
+                else {
+                    out.println("Invalid input - a LOAD command should be " +
+                            "proceeded by the file name of the saved game to " +
+                            "load. The file name should be separated from " +
+                            "the LOAD command by a space.\n");
+                }
+                
+                try {
+                    result = playGame();
+                }
+                catch(QuitGameException qge) {
+
+                    out.println("\n" + qge.getMessage() + "\n");
+                    
+                    // Might be a more elegant solution.
+                    if(!qge.getMessage().contains("Game over")) {
+                        continue;
+                    }
+                }
+
+                if(result != 0) {
+                    out.println("Player " + result + " is the winner!\n");
+                    result = -1;
+                }
+                else {
+                    out.println("The game was a draw!\n");
+                    result = -1;
+                }
             }
             else if(command.equals("SAVE")) {
-                saveGame(command);
+                if(checkValidIOCommand(commands)) {
+                    saveGame(commands.get(1));
+                }
+                else {
+                    out.println("Invalid input - a SAVE command should be  " +
+                            "proceeded by a file name to save the current " + 
+                            "game under. The file name should be separated " +
+                            "from the SAVE command by a space.\n");
+                }
             }
             else if(command.equals("EXIT")) {
                 System.exit(0);
@@ -204,63 +375,6 @@ public class GameManagerImpl implements GameManager, Serializable {
                 out.println("Invalid input - valid commands are listed " +
                         "in the main menu.\n");
             }
-            
-//            switch(commands.get(0)) {
-//                
-//                case "NEW": {
-//                    
-//                    try {
-//                        this.game = createNewGame(commands);
-//                    }
-//                    catch(IllegalArgumentException ex) {
-//                        out.println(ex.getMessage());
-//                        continue;
-//                    }
-//
-//                    try {
-//                        result = playGame();
-//                    }
-//                    catch(QuitGameException qge) {
-//                        
-//                        out.println("\n" + qge.getMessage() + "\n");
-//                        
-//                        if(!qge.getMessage().contains("Game over")) {
-//                            continue;
-//                        }
-//                    }
-//
-//                    if(result != 0) {
-//                        out.println("Player " + result + " is the winner!\n");
-//                    }
-//                    else if(result == 0) {
-//                        out.println("The game was a draw!\n");
-//                    }
-//                    else {
-//                        out.println("Something really bad has happened. Help!");
-//                    }
-//                }
-//                    
-//                
-//                case "LOAD": {
-//                    throw new UnsupportedOperationException("Not supported " +
-//                            "yet.");
-//                }
-//                    
-//                    
-//                case "SAVE": {
-//                    throw new UnsupportedOperationException("Not supported " +
-//                            "yet.");
-//                }
-//                
-//                case "EXIT": {
-//                    System.exit(0);
-//                }
-//                
-//                default: {
-//                    out.println("Invalid input - valid commands are listed " +
-//                            "in the main menu.\n");
-//                }
-//            }
         }
             
         return this.game;
@@ -351,10 +465,14 @@ public class GameManagerImpl implements GameManager, Serializable {
             // Assigning player names.
             if(player1.length == 1) {
                 newGame.setPlayerName(1, "Player");
+            }
+            else {
+                newGame.setPlayerName(1, player1[1]);        
+            }
+            if(player2.length == 1) {
                 newGame.setPlayerName(2, "Player");
             }
             else {
-                newGame.setPlayerName(1, player1[1]);
                 newGame.setPlayerName(2, player2[1]);
             }
             
@@ -396,6 +514,40 @@ public class GameManagerImpl implements GameManager, Serializable {
         else {
             gameManager.manage(System.in, System.out);
         }
+    }
+
+    private boolean checkValidIOCommand(List<String> commands) {
+        if(commands.size() == 2) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+    
+    /**
+     * Processes the String given by Board's toString returning a copy of the
+     * board with the same properties.
+     * 
+     * @param currentBoardString string to be turned into a board.
+     * @return Board object representing a string.
+     */
+    private Board processBoardString(String currentBoardString) {
+        
+        String boardString = currentBoardString.split(":")[0].trim();
+        String scoreString = currentBoardString.split(":")[1].trim();
+        
+        String[] housesStrings = boardString.split(" ");
+        
+        int player1Score = Integer.parseInt(scoreString.split(" ")[0]);
+        int player2Score = Integer.parseInt(scoreString.split(" ")[1]);
+        int[] houseInts = new int[12];
+        
+        for(int i = 0; i < 12; i++) {
+            houseInts[i] = Integer.parseInt(housesStrings[i]);
+        }
+        
+        return new BoardImpl(houseInts, player1Score, player2Score);
     }
     
 }

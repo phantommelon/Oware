@@ -18,7 +18,6 @@
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -28,16 +27,16 @@ import java.util.List;
  * @version 0.5
  */
 public class GameImpl implements Game, Serializable {
-
+    
+    private Board board;
     private Player player1;
     private Player player2;
     private String player1Name;
     private String player2Name;
     private byte turn;
-    private BoardImpl board;
-    private List<Board> previousBoards;
     private int consecutiveMoves;
     private boolean isFinished;
+    private List<Board> previousBoards;
     
     /**
      * Constructor for the GameImpl class.
@@ -54,6 +53,22 @@ public class GameImpl implements Game, Serializable {
         previousBoards = new ArrayList<>();
         consecutiveMoves = 0;
         isFinished = false;
+    }
+    
+    public GameImpl(Board currentBoard, Player player1, Player player2, 
+            String player1Name, String player2Name, byte turn, 
+            int consecutiveMoves, boolean isFinished, List<Board> previousBoards
+            ) {
+        
+        this.board = currentBoard;
+        this.consecutiveMoves = consecutiveMoves;
+        this.isFinished = isFinished;
+        this.player1 = player1;
+        this.player1Name = player1Name;
+        this.player2 = player2;
+        this.player2Name = player2Name;
+        this.previousBoards = previousBoards;
+        this.turn = turn;
     }
     
     /**
@@ -172,18 +187,35 @@ public class GameImpl implements Game, Serializable {
 
     @Override
     public String toString() {
+        
+        String newLine = System.getProperty("line.separator");
+        
+        // All fields are needed for reconstruction of the game.
         String output = new String();
-        output += getPlayerName(1) + ": " + board.getScore(1) + "\n";
-        output += getPlayerName(2) + ": " + board.getScore(2) + "\n";
-        output += getPlayerName(turn) + " to play.\n\n";
+        output += board.toString() + newLine;
+        output += player1.getClass().getName() + newLine;
+        output += player2.getClass().getName() + newLine;
+        output += player1Name + newLine;
+        output += player2Name + newLine;
+        output += turn + newLine;
+        output += consecutiveMoves + newLine;
+        output += isFinished + newLine;
         
-        List<String> houseValues = new ArrayList<>();
-        houseValues = Arrays.asList(board.toString().split(":")[0].split(" "));
-        
-        for(int i = 0; i < 12; i++) {
-            output += "House " + (i+1) + " contains " + houseValues.get(i) + 
-                    " seeds\n";
+        // ; separates boards.
+        for(Board previousBoard : previousBoards) {
+            output += previousBoard.toString() + ";";
         }
+//        output += getPlayerName(1) + ": " + board.getScore(1) + "\n";
+//        output += getPlayerName(2) + ": " + board.getScore(2) + "\n";
+//        output += getPlayerName(turn) + " to play.\n\n";
+//        
+//        List<String> houseValues = new ArrayList<>();
+//        houseValues = Arrays.asList(board.toString().split(":")[0].split(" "));
+//        
+//        for(int i = 0; i < 12; i++) {
+//            output += "House " + (i+1) + " contains " + houseValues.get(i) + 
+//                    " seeds\n";
+//        }
 //        output += "_\u03326_\u03325_\u03324_\u03323_\u03322_\u03321_\n";
 //        
 //        for(int i = 0; i < 6; i++) {
@@ -214,17 +246,17 @@ public class GameImpl implements Game, Serializable {
      * failed.
      */
     private void captureAllSeeds() throws InvalidHouseException {
-        for(int i = 0; i < 12; i++) {
-                    
-            int house = board.indexToHouseConversion(i);
-            int playerNum = board.indexToPlayerConversion(i);
-            int seeds = 0;
-
-            seeds = board.getSeeds(house, playerNum) + 
-                    board.getScore(playerNum);
-
-            board.setScore(seeds, playerNum);
-        }        
+        
+        int seeds = 0;
+        
+        for(int i = 1; i < 3; i++) {
+            
+            for(int j = 1; j < 7; j++) {
+                
+                seeds = board.getSeeds(j, i) + board.getScore(i);
+                board.setScore(seeds, i);
+            }
+        }
     }
 
     /**
