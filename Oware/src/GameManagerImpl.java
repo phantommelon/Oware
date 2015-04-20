@@ -164,7 +164,7 @@ public class GameManagerImpl implements GameManager, Serializable {
                 
                 String saveInput;
                 
-                // Check for user input
+                // Check for user input.
                 do {
                     saveInput = scanner.nextLine();
                     
@@ -243,7 +243,7 @@ public class GameManagerImpl implements GameManager, Serializable {
             } 
             catch(InvalidHouseException | InvalidMoveException |
                     IllegalArgumentException | IllegalStateException ex) {
-                out.println("\n" + ex.getMessage());
+                out.println(ex.getMessage());
             }
         }
         
@@ -253,16 +253,9 @@ public class GameManagerImpl implements GameManager, Serializable {
     @Override
     public Game manage(InputStream in, PrintStream out) {
         
-//        try {
-//            this.fIn = (FileInputStream) in;
-//        }
-//        // Not a FileInputStream.
-//        catch(ClassCastException cce) {
         this.in = in;
-//        }
-        
         this.out = out;
-
+        
         scanner = new Scanner(in);
         
         int result = -1;
@@ -300,24 +293,14 @@ public class GameManagerImpl implements GameManager, Serializable {
                 }
                 catch(QuitGameException qge) {
 
-                    out.println("\n" + qge.getMessage() + "\n");
+                    out.println(qge.getMessage() + "\n");
 
                     if(!qge.getMessage().contains("Game over")) {
                         continue;
                     }
                 }
 
-                if(result != 0) {
-                    out.println("Player " + result + " is the winner!\n");
-                    result = -1;
-                }
-                else if(result == 0) {
-                    out.println("The game was a draw!\n");
-                    result = -1;
-                }
-                else {
-                    out.println("Something really bad has happened. Help!");
-                }
+                displayResults(result);
             }
             else if(command.equals("LOAD")) {
                 
@@ -340,7 +323,7 @@ public class GameManagerImpl implements GameManager, Serializable {
                 }
                 catch(QuitGameException qge) {
 
-                    out.println("\n" + qge.getMessage() + "\n");
+                    out.println(qge.getMessage() + "\n");
                     
                     // Might be a more elegant solution.
                     if(!qge.getMessage().contains("Game over")) {
@@ -348,14 +331,7 @@ public class GameManagerImpl implements GameManager, Serializable {
                     }
                 }
 
-                if(result != 0) {
-                    out.println("Player " + result + " is the winner!\n");
-                    result = -1;
-                }
-                else {
-                    out.println("The game was a draw!\n");
-                    result = -1;
-                }
+                displayResults(result);
             }
             else if(command.equals("SAVE")) {
                 if(checkValidIOCommand(commands)) {
@@ -439,24 +415,6 @@ public class GameManagerImpl implements GameManager, Serializable {
                 throw ex;
             }
             
-            
-                // Will have definitely created a player when this code is reached.
-//            if(fIn != null) {
-//                try {
-//                    fIn.getChannel().position(0);
-//                    players[0].setIn(fIn);
-//                    players[1].setIn(fIn);
-//                } 
-//                catch (IOException ex1) {
-//                    Logger.getLogger(GameManagerImpl.class.getName()).log(Level.SEVERE, null, ex1);
-//                }
-//            }
-//            else { 
-//            }
-            
-//            players[0].setIn(in);
-//            players[0].
-//            players[1].setIn(in);
             players[0].setOut(out);
             players[1].setOut(out);
             
@@ -548,6 +506,18 @@ public class GameManagerImpl implements GameManager, Serializable {
         }
         
         return new BoardImpl(houseInts, player1Score, player2Score);
+    }
+    
+    private void displayResults(int result) {
+
+        if(result != 0) {
+            out.println("Player " + result + " is the winner!\n");
+            result = -1;
+        }
+        else {
+            out.println("The game was a draw!\n");
+            result = -1;
+        }
     }
     
 }
