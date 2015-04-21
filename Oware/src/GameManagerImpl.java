@@ -256,7 +256,7 @@ public class GameManagerImpl implements GameManager, Serializable {
         this.in = in;
         this.out = out;
         
-        scanner = new Scanner(in);
+        scanner = new Scanner(this.in);
         
         int result = -1;
         
@@ -389,10 +389,7 @@ public class GameManagerImpl implements GameManager, Serializable {
             
             // Player1 creation.
             if(player1[0].equals("Human")) {
-                HumanPlayer hp = new HumanPlayer();
-                // TODO remove.
-                hp.setReader(scanner);
-                players[0] = hp;
+                players[0] = new HumanPlayer();
             }
             else if(player1[0].equals("Computer")) {
                 players[0] = new ComputerPlayer();
@@ -403,10 +400,7 @@ public class GameManagerImpl implements GameManager, Serializable {
             
             // Player2 creation
             if(player2[0].equals("Human")) {
-                HumanPlayer hp = new HumanPlayer();
-                // TODO remove.
-                hp.setReader(scanner);
-                players[1] = hp;
+                players[1] = new HumanPlayer();
             }
             else if(player2[0].equals("Computer")) {
                 players[1] = new ComputerPlayer();
@@ -415,6 +409,8 @@ public class GameManagerImpl implements GameManager, Serializable {
                 throw ex;
             }
             
+            players[0].setIn(in);
+            players[1].setIn(in);
             players[0].setOut(out);
             players[1].setOut(out);
             
@@ -441,39 +437,6 @@ public class GameManagerImpl implements GameManager, Serializable {
         }
     }
     
-    public static void main(String[] args) throws FileNotFoundException {
-        
-//        System.setIn(new FileInputStream("test.txt"));
-        
-        GameManagerImpl gameManager = new GameManagerImpl();
-        
-        // Optional launch straight into game -- MODIFY
-        if(args.length != 0) {
-            
-            String fileName = args[0];
-            
-            try {
-                gameManager.loadGame(fileName);
-            } 
-            catch (FileFailedException ex) {
-                System.out.println(ex.getMessage());
-                System.exit(4);
-            }
-            
-            try {
-                gameManager.playGame();
-            }
-            
-            catch (QuitGameException ex) {
-                System.out.println(ex.getMessage());
-            }
-        }
-        
-        else {
-            gameManager.manage(System.in, System.out);
-        }
-    }
-
     private boolean checkValidIOCommand(List<String> commands) {
         if(commands.size() == 2) {
             return true;
@@ -517,6 +480,39 @@ public class GameManagerImpl implements GameManager, Serializable {
         else {
             out.println("The game was a draw!\n");
             result = -1;
+        }
+    }
+    
+    public static void main(String[] args) throws FileNotFoundException {
+        
+        System.setIn(new FileInputStream("test.txt"));
+        
+        GameManagerImpl gameManager = new GameManagerImpl();
+        
+        // Optional launch straight into game -- MODIFY
+        if(args.length != 0) {
+            
+            String fileName = args[0];
+            
+            try {
+                gameManager.loadGame(fileName);
+            } 
+            catch (FileFailedException ex) {
+                System.out.println(ex.getMessage());
+                System.exit(4);
+            }
+            
+            try {
+                gameManager.playGame();
+            }
+            
+            catch (QuitGameException ex) {
+                System.out.println(ex.getMessage());
+            }
+        }
+        
+        else {
+            gameManager.manage(System.in, System.out);
         }
     }
     
