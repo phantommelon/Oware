@@ -18,46 +18,67 @@
 
 import java.io.InputStream;
 import java.io.PrintStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * {Insert Description of Class ComputerPlayer Here}
+ * Deterministic Computer Player
  * 
  * @author Alistair Madden
  * @version 0.1
  */
 class ComputerPlayer implements Player {
 
+    InputStream in;
+    PrintStream out;
     
-    
+    /**
+     * Default constructor for ComputerPlayer Class.
+     */
     public ComputerPlayer() {
-    }
-
-    ComputerPlayer(String player1) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
     }
 
     @Override
-    public int getMove(Board b, int playerNum) throws QuitGameException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public int getMove(Board board, int playerNum) throws QuitGameException {
+        
+        // Very simple, choose first valid house!
+        for(int i = 0; i < 6; i++) {
+            
+            try {
+                board.makeMove(i + 1, playerNum);
+            }
+            catch (InvalidHouseException ex) {
+                continue;
+            } 
+            catch (InvalidMoveException ex) {
+                continue;
+            }
+
+            return i + 1;
+        }
+        
+        // Should never reach here because the game will have ended if no seeds
+        // remain in house.
+        return 0;
     }
 
     @Override
     public boolean isComputer() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return true;
     }
 
     @Override
     public void setIn(InputStream in) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.in = in;
     }
 
     @Override
     public void setOut(PrintStream out) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        this.out = out;
     }
-
-    String getName() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
+    
 }

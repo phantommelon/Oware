@@ -103,8 +103,6 @@ public class BoardImpl implements Board, Serializable {
         }
                
         // Move seems legit. Proceed.
-        else {
-
             int seeds = getSeeds(house, playerNum);
             setSeeds(0, house, playerNum);
 
@@ -121,6 +119,10 @@ public class BoardImpl implements Board, Serializable {
                     
                     sowSeed(indexToHouseConversion(index),
                             indexToPlayerConversion(index));
+                }
+                // Give an extra seed because it's technically not been sown.
+                else {
+                    seeds++;
                 }
             }
             
@@ -142,7 +144,6 @@ public class BoardImpl implements Board, Serializable {
                 seeds = getSeeds(indexToHouseConversion(index),
                         indexToPlayerConversion(index));
             }
-        }
     }
     
     /**
