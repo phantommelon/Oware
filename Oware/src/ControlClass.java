@@ -47,15 +47,21 @@ public class ControlClass {
         
         child = createNewChild();
         
-        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        scanner = new Scanner(in);
         
-        try {
-            out.println(br.readLine());
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(ControlClass.class.getName()).log(Level.SEVERE, null, ex);
-        }
+//        BufferedReader br = new BufferedReader(new InputStreamReader(in));
+        
+//        try {
+//            out.println(br.readLine());
+//        } 
+//        catch (IOException ex) {
+//            Logger.getLogger(ControlClass.class.getName()).log(Level.SEVERE, null, ex);
+//        }
 
+        child.printStream();
+        
+        out.println(scanner.nextLine());
+        
         child.printStream();
     }
     
