@@ -358,7 +358,41 @@ public class GameManagerImpl implements GameManager, Serializable {
     
     @Override
     public int compare(Player o1, Player o2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        
+        game = new GameImpl(o1, o2);
+        int result1;
+        
+        try {
+            result1 = playGame();
+        } 
+        catch (QuitGameException ex) {
+            // Check current player does not change after ex is thrown.
+            result1 = 3 - game.getCurrentPlayerNum();
+        }
+        
+        game = new GameImpl(o2, o1);
+        int result2;
+        
+        try {
+            result2 = playGame();
+        } 
+        catch (QuitGameException ex) {
+            // Check current player does not change after ex is thrown.
+            result2 = 3 - game.getCurrentPlayerNum();
+        }
+        
+        // Conditions for equality, o1 better, o2 better respectively.
+        if((result1 == 0 && result2 == 0) || (result1 == 1 && result2 == 2) ||
+                (result1 == 2 && result1 == 1)) {
+            return 0;
+        }
+        else if((result1 == 1 && result2 == 0) || (result1 == 0 && result2 == 1)
+                || (result1 == 1 && result2 == 1)) {
+            return 1;
+        }
+        else {
+            return -1;
+        }
     }
     
     /**
@@ -485,7 +519,7 @@ public class GameManagerImpl implements GameManager, Serializable {
     
     public static void main(String[] args) throws FileNotFoundException {
         
-        System.setIn(new FileInputStream("test.txt"));
+//        System.setIn(new FileInputStream("test.txt"));
         
         GameManagerImpl gameManager = new GameManagerImpl();
         
