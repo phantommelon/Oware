@@ -18,7 +18,6 @@
 
 import java.io.Serializable;
 import java.util.Arrays;
-import utilities.DeepCopy;
 
 /**
  * An object representing the state of the Oware board.
@@ -30,7 +29,7 @@ import utilities.DeepCopy;
  */
 public class BoardImpl implements Board, Serializable {
     
-    private int[] houses;
+    private final int[] houses;
     private int p1Score;
     private int p2Score;
     
@@ -65,14 +64,16 @@ public class BoardImpl implements Board, Serializable {
     public void makeMove(int house, int playerNum) throws InvalidHouseException,
             InvalidMoveException {
         
+        // Check house number and player number are valid.
+        checkForInvalidHouseException(house, playerNum);
+        
         // Make an array holding the opponent's houses.
         int[] opponentHouses = new int[6];
         System.arraycopy(houses, (3 - playerNum)*6 - 6, opponentHouses, 0, 6);
         
         // Check conditions for legal move.
         
-        // Check house number and player number are valid.
-        checkInvalidHouse(house, playerNum);
+        
         
         // Check selected house has non-zero number of seeds
         if(getSeeds(house, playerNum) == 0) {
@@ -177,30 +178,44 @@ public class BoardImpl implements Board, Serializable {
      * houses array.
      */
     public int houseToIndexConversion(int house, int playerNum) {
+        
+        checkValidHouse(house);
+        checkValidPlayer(playerNum);
+        
         return house + (playerNum - 1)*6 - 1;
     }
 
     @Override
     public int getSeeds(int house, int playerNum) throws InvalidHouseException {
-        checkInvalidHouse(house, playerNum);
+        
+        checkForInvalidHouseException(house, playerNum);
+        
         return houses[houseToIndexConversion(house, playerNum)];
     }
 
     @Override
     public void sowSeed(int house, int playerNum) throws InvalidHouseException {
-        checkInvalidHouse(house, playerNum);
+        
+        checkForInvalidHouseException(house, playerNum);
+        
         houses[houseToIndexConversion(house, playerNum)]++;
     }
 
     @Override
     public void setSeeds(int seeds, int house, int playerNum) throws 
             InvalidHouseException {
-        checkInvalidHouse(house, playerNum);
+        
+        checkForInvalidHouseException(house, playerNum);
+        checkValidSeeds(seeds);
+        
         houses[houseToIndexConversion(house, playerNum)] = seeds;
     }
 
     @Override
     public int getScore(int playerNum) {
+        
+        checkValidPlayer(playerNum);
+        
         if(playerNum == 1) {
             return p1Score;
         }
@@ -214,6 +229,10 @@ public class BoardImpl implements Board, Serializable {
 
     @Override
     public void addScore(int seeds, int playerNum) {
+        
+        checkValidSeeds(seeds);
+        checkValidPlayer(playerNum);
+        
         if(playerNum == 1) {
             p1Score += seeds;
         }
@@ -224,6 +243,10 @@ public class BoardImpl implements Board, Serializable {
 
     @Override
     public void setScore(int seeds, int playerNum) {
+        
+        checkValidSeeds(seeds);
+        checkValidPlayer(playerNum);
+        
         if(playerNum == 1) {
             p1Score = seeds;
         }
@@ -240,7 +263,7 @@ public class BoardImpl implements Board, Serializable {
     
     @Override
     public String toString() {
-        String description = new String();
+        String description = "";
         
         // SeedNumber(House i) : PlayerScore
         for(int i = 0; i < 12; i++) {
@@ -260,17 +283,17 @@ public class BoardImpl implements Board, Serializable {
 
     @Override
     public boolean equals(Object obj) {
+        
         if (obj == null) {
             return false;
         }
         if (getClass() != obj.getClass()) {
             return false;
         }
+        
         final BoardImpl other = (BoardImpl) obj;
-        if (!Arrays.equals(this.houses, other.houses)) {
-            return false;
-        }
-        return true;
+        
+        return Arrays.equals(this.houses, other.houses);
     }
     
     /**
@@ -282,18 +305,65 @@ public class BoardImpl implements Board, Serializable {
      * @throws InvalidHouseException If either house or player numbers are
      * incorrect.
      */
-    private void checkInvalidHouse(int house, int playerNum) throws 
+    private void checkForInvalidHouseException(int house, int playerNum) throws 
             InvalidHouseException {
-        // In reality, this shouldn't happen
-        if(!(playerNum < 3 && playerNum > 0)) {
+        
+        if(!(playerNum == 1 || playerNum == 2)) {
             throw new InvalidHouseException("Invalid input - Player number " +
-                    "out of range");
+                    "out of range.\n");
         }
         if(!(house < 7 && house > 0)) {
             throw new InvalidHouseException("Invalid input - House number " +
                     "out of range. Please enter a value from 1 to 6 " +
-                    "(inclusive).");
+                    "(inclusive).\n");
         }
+    }
+    
+    /**
+     * Utility method to check if a valid house number has been entered.
+     * 
+     * @param house the number of the house to be checked.
+     */
+    private void checkValidHouse(int house) {
+        
+        if(!(house < 7 && house >0)) {
+            throw new IllegalArgumentException("Invalid input - House number " +
+                    "out of range. Please enter a value from 1 to 6 " +
+                    "(inclusive).\n");
+        }
+    }
+    
+    /**
+     * Utility method to check if a valid player number has been entered.
+     * 
+     * @param playerNum the number of the player to be checked.
+     */
+    private void checkValidPlayer(int playerNum) {
+        
+        if(!(playerNum == 1 || playerNum ==2)) {
+            throw new IllegalArgumentException("Invalid input - player " +
+                    "number can only be 1 or 2.\n");
+        }
+    }
+
+    /**
+     * Utility method to check if a valid seed number has been entered.
+     * 
+     * @param seeds the number of seeds to be checked.
+     */
+    private void checkValidSeeds(int seeds) {
+        
+        if(seeds < 0) {
+            throw new IllegalArgumentException("Invalid input - seeds cannot " +
+                    "take a negative value.\n");
+        }
+        
+        if(seeds > 48) {
+            throw new IllegalArgumentException("Invalid input - seeds cannot " +
+                    "take a value greater than the maximum number of seeds " +
+                    "in play.\n");
+        }
+        
     }
 
 }
