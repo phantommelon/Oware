@@ -26,8 +26,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Class to manage the game.
@@ -185,7 +183,7 @@ public class GameManagerImpl implements GameManager {
                 fw.close();
             } 
             catch (IOException ex) {
-                Logger.getLogger(GameManagerImpl.class.getName()).log(Level.SEVERE, null, ex);
+                out.println("An I/O error has occured. Please try again.\n");
             }
             
             out.println("Save successful! Returning to the main menu...\n");   
@@ -264,7 +262,7 @@ public class GameManagerImpl implements GameManager {
             out.println(mainMenu);
             out.print("Please enter a command: ");
 
-            String command = "";
+            String command;
             
             command = scanner.nextLine();
                 
@@ -287,22 +285,20 @@ public class GameManagerImpl implements GameManager {
                     result = playGame();
                 }
                 catch(QuitGameException qge) {
-
                     out.println(qge.getMessage() + "\n");
-
-                    if(!qge.getMessage().contains("Game over")) {
-                        continue;
-                    }
                 }
 
                 displayResults(result);
+                
+                result = -1;
             }
             else if(command.equals("LOAD")) {
                 
                 if(checkValidIOCommand(commands)) {
                     try {
                         loadGame(commands.get(1));
-                    } catch (FileFailedException ex) {
+                    } 
+                    catch (FileFailedException ex) {
                         out.println(ex.getMessage() + "\n");
                     }
                 }
@@ -317,16 +313,12 @@ public class GameManagerImpl implements GameManager {
                     result = playGame();
                 }
                 catch(QuitGameException qge) {
-
                     out.println(qge.getMessage() + "\n");
-                    
-                    // Might be a more elegant solution.
-                    if(!qge.getMessage().contains("Game over")) {
-                        continue;
-                    }
                 }
 
                 displayResults(result);
+                
+                result = -1;
             }
             else if(command.equals("SAVE")) {
                 if(checkValidIOCommand(commands)) {
@@ -340,15 +332,18 @@ public class GameManagerImpl implements GameManager {
                 }
             }
             else if(command.equals("EXIT")) {
-                System.exit(0);
+                return this.game;
             }
             else {
                 out.println("Invalid input - valid commands are listed " +
                         "in the main menu.\n");
             }
         }
-            
+        
+        // Don't think the program will ever get here as result is reset to -1
+        // after printing results.
         return this.game;
+        
     }
     
     @Override
@@ -463,12 +458,7 @@ public class GameManagerImpl implements GameManager {
     }
     
     private boolean checkValidIOCommand(List<String> commands) {
-        if(commands.size() == 2) {
-            return true;
-        }
-        else {
-            return false;
-        }
+        return commands.size() == 2;
     }
     
     /**
@@ -500,17 +490,13 @@ public class GameManagerImpl implements GameManager {
 
         if(result != 0) {
             out.println("Player " + result + " is the winner!\n");
-            result = -1;
         }
         else {
             out.println("The game was a draw!\n");
-            result = -1;
         }
     }
     
-    public static void main(String[] args) throws FileNotFoundException {
-        
-//        System.setIn(new FileInputStream("test.txt"));
+    public static void main(String[] args) {
         
         GameManagerImpl gameManager = new GameManagerImpl();
         

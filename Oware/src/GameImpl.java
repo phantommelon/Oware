@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,17 +25,17 @@ import java.util.List;
  * @author Alistair Madden
  * @version 0.5
  */
-public class GameImpl implements Game, Serializable {
+public class GameImpl implements Game {
     
-    private Board board;
-    private Player player1;
-    private Player player2;
+    private final Board board;
+    private final Player player1;
+    private final Player player2;
     private String player1Name;
     private String player2Name;
     private byte turn;
     private int consecutiveMoves;
     private boolean isFinished;
-    private List<Board> previousBoards;
+    private final List<Board> previousBoards;
     
     /**
      * Constructor for the GameImpl class.
@@ -57,6 +56,22 @@ public class GameImpl implements Game, Serializable {
         isFinished = false;
     }
     
+    /**
+     * Copy constructor.
+     * 
+     * This is to allow an instance of GameImpl to be created with exactly the
+     * same parameters.
+     * 
+     * @param currentBoard Board of the game.
+     * @param player1 Player1 in the game.
+     * @param player2 Player2 in the game.
+     * @param player1Name Player1's name.
+     * @param player2Name Player2's name.
+     * @param turn Byte indicating whose turn it is.
+     * @param consecutiveMoves Number of moves without a capture.
+     * @param isFinished Boolean to signal if the game is finished.
+     * @param previousBoards List of previous boards.
+     */
     public GameImpl(Board currentBoard, Player player1, Player player2, 
             String player1Name, String player2Name, byte turn, 
             int consecutiveMoves, boolean isFinished, List<Board> previousBoards
@@ -168,7 +183,8 @@ public class GameImpl implements Game, Serializable {
         int previousP1Score = board.getScore(1);
         int previousP2Score = board.getScore(2);
 
-        // Throws the InvalidHouse/InvalidMove exceptions.
+        // Board.makeMove throws the InvalidHouse/InvalidMove exceptions. 
+        // Player.getMove throws the QuitGameException.
         board.makeMove(getCurrentPlayer().getMove(board.clone(), turn), 
                 getCurrentPlayerNum());
         
@@ -207,34 +223,6 @@ public class GameImpl implements Game, Serializable {
         for(Board previousBoard : previousBoards) {
             output += previousBoard.toString() + ";";
         }
-//        output += getPlayerName(1) + ": " + board.getScore(1) + "\n";
-//        output += getPlayerName(2) + ": " + board.getScore(2) + "\n";
-//        output += getPlayerName(turn) + " to play.\n\n";
-//        
-//        List<String> houseValues = new ArrayList<>();
-//        houseValues = Arrays.asList(board.toString().split(":")[0].split(" "));
-//        
-//        for(int i = 0; i < 12; i++) {
-//            output += "House " + (i+1) + " contains " + houseValues.get(i) + 
-//                    " seeds\n";
-//        }
-//        output += "_\u03326_\u03325_\u03324_\u03323_\u03322_\u03321_\n";
-//        
-//        for(int i = 0; i < 6; i++) {
-//            output += "|\u0332\u0305" + houseValues.get(i);
-//        }
-//        
-//        output += "|\n";
-//        output += "|-----------|\n";
-//        
-//        for(int i = 6; i < 12; i++) {
-//            output += "|" + houseValues.get(i);
-//        }
-//        
-//        output += "|\n";
-//        output += "-------------\n";
-//        
-//        output += " 1 2 3 4 5 6 \n";
         
         return output;
     }
@@ -249,7 +237,7 @@ public class GameImpl implements Game, Serializable {
      */
     private void captureAllSeeds() throws InvalidHouseException {
         
-        int seeds = 0;
+        int seeds;
         
         for(int i = 1; i < 3; i++) {
             
@@ -320,9 +308,4 @@ public class GameImpl implements Game, Serializable {
         }
     }
     
-    public String toFileString() {
-        String fileString = "";
-        fileString += board.toString();
-        return fileString;
-    }
 }
