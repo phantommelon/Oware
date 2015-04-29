@@ -44,6 +44,12 @@ public class GameImpl implements Game {
      * @param player2 another player.
      */
     public GameImpl(Player player1, Player player2) {
+        
+        if(player1 == null || player2 == null) {
+            throw new IllegalArgumentException("Invalid input - neither " +
+                    "player used to create a game should be null.");
+        }
+        
         this.player1 = player1;
         this.player2 = player2;
         
@@ -95,14 +101,13 @@ public class GameImpl implements Game {
      */
     @Override
     public Player getCurrentPlayer() {
+        
         if(turn == 1) {
             return player1;
         }
-        else if(turn == 2) {
-            return player2;
-        }
+        // Otherwise turn == 2.
         else {
-            return null; //Something went wrong
+            return player2;
         }
     }
 
@@ -277,15 +282,17 @@ public class GameImpl implements Game {
      * @return a <code>String</code> object containing the player's name.
      */
     public String getPlayerName(int playerNum) {
+        
+        checkValidPlayer(playerNum);
+        
         if(playerNum == 1) {
             return player1Name;
         }
-        else if(playerNum == 2) {
+        // Only other option is playerNum == 2.
+        else {
             return player2Name;
         }
-        else {
-            throw new IllegalArgumentException("Invalid player number!");
-        }
+        
     }
 
     /**
@@ -297,14 +304,28 @@ public class GameImpl implements Game {
      */
     public void setPlayerName(int playerNum, String playerName) {
         
+        checkValidPlayer(playerNum);
+        
         if(playerNum == 1) {
             this.player1Name = playerName;
         }
-        else if(playerNum == 2) {
+        // Only other option is playerNum == 2.
+        else {
             this.player2Name = playerName;
         }
-        else {
-            throw new IllegalArgumentException("Invalid player number!");
+
+    }
+    
+    /**
+     * Utility method to check if a valid player number has been entered.
+     * 
+     * @param playerNum the number of the player to be checked.
+     */
+    private void checkValidPlayer(int playerNum) {
+        
+        if(!(playerNum == 1 || playerNum ==2)) {
+            throw new IllegalArgumentException("Invalid input - player " +
+                    "number can only be 1 or 2.\n");
         }
     }
     
