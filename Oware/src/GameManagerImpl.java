@@ -16,23 +16,12 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.PrintStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -48,7 +37,7 @@ import java.util.logging.Logger;
  * @author Alistair Madden
  * @version 0.3
  */
-public class GameManagerImpl implements GameManager, Serializable {
+public class GameManagerImpl implements GameManager {
     
     private Game game;
     private String mainMenu;
@@ -86,14 +75,20 @@ public class GameManagerImpl implements GameManager, Serializable {
                 loadScanner = new Scanner(path);
             } 
             catch (FileNotFoundException ex) {
-                throw new FileFailedException("Failed to load file. Please " +
-                        "try again.\n");
+                throw new FileFailedException("File " + path + " not found. " +
+                        "Please try again.\n");
             }
             
             List<String> lines = new ArrayList<>();
             
             while(loadScanner.hasNextLine()) {
                 lines.add(loadScanner.nextLine());
+            }
+            
+            // Check for files of 8 lines long.
+            if(!(lines.size() == 8)) {
+                throw new FileFailedException("File is malformatted. Please " +
+                        "check the right file was selected.\n");
             }
             
             // Fields that need to be determined to recreate game.
@@ -313,7 +308,7 @@ public class GameManagerImpl implements GameManager, Serializable {
                 }
                 else {
                     out.println("Invalid input - a LOAD command should be " +
-                            "proceeded by the file name of the saved game to " +
+                            "followed by the file name of the saved game to " +
                             "load. The file name should be separated from " +
                             "the LOAD command by a space.\n");
                 }
@@ -339,7 +334,7 @@ public class GameManagerImpl implements GameManager, Serializable {
                 }
                 else {
                     out.println("Invalid input - a SAVE command should be  " +
-                            "proceeded by a file name to save the current " + 
+                            "followed by a file name to save the current " + 
                             "game under. The file name should be separated " +
                             "from the SAVE command by a space.\n");
                 }
@@ -406,8 +401,9 @@ public class GameManagerImpl implements GameManager, Serializable {
      */
     private Game createNewGame(List<String> commands) {
         
+        // Does this really belong here?
         IllegalArgumentException ex = new IllegalArgumentException("Invalid " +
-                "input - A NEW command must be proceeded by two further " + 
+                "input - A NEW command must be followed by two further " + 
                 "commands, 'Human' or 'Computer' to specify the type of " + 
                 "player. Optionally a colon may be added after the player " + 
                 "type to give a name to the player.\n");
@@ -417,8 +413,8 @@ public class GameManagerImpl implements GameManager, Serializable {
         Player[] players;
         
         if(commands.size() == 3) {
-            player1 = commands.get(1).split(":");
-            player2 = commands.get(2).split(":");
+            player1 = commands.get(1).split(":", 2);
+            player2 = commands.get(2).split(":", 2);
             players = new Player[2];
             
             // Player1 creation.
@@ -451,16 +447,11 @@ public class GameManagerImpl implements GameManager, Serializable {
             GameImpl newGame = new GameImpl(players[0], players[1]);
 
             // Assigning player names.
-            if(player1.length == 1) {
-                newGame.setPlayerName(1, "Player");
+            if(!(player1.length == 1)) {
+                newGame.setPlayerName(1, player1[1]);
             }
-            else {
-                newGame.setPlayerName(1, player1[1]);        
-            }
-            if(player2.length == 1) {
-                newGame.setPlayerName(2, "Player");
-            }
-            else {
+
+            if(!(player2.length == 1)) {
                 newGame.setPlayerName(2, player2[1]);
             }
             

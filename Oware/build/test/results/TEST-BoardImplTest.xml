@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<testsuite errors="2" failures="6" hostname="Al-Laptop" name="BoardImplTest" skipped="0" tests="14" time="0.066" timestamp="2015-04-03T21:19:56">
+<testsuite errors="0" failures="0" hostname="Al-Laptop" name="BoardImplTest" skipped="0" tests="12" time="0.058" timestamp="2015-04-29T14:09:03">
   <properties>
     <property name="libs.jsp-compiler.javadoc" value="" />
     <property name="netbeans.autoupdate.country" value="GB" />
@@ -12,7 +12,7 @@
     <property name="ant.core.lib" value="/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant.jar" />
     <property name="javadoc.windowtitle" value="" />
     <property name="libs.jsp-compilation.javadoc" value="" />
-    <property name="user.dir" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware" />
+    <property name="user.dir" value="/home/alistair/Documents/Git/Oware/Oware" />
     <property name="libs.javaee-api-7.0.src" value="" />
     <property name="java.vm.version" value="25.40-b25" />
     <property name="libs.DataBindingME.classpath" value="/home/alistair/Applications/netbeans-8.0.2/mobility/modules/ext/netbeans_databindingme.jar" />
@@ -59,7 +59,7 @@
     <property name="libs.j2me_common_ant.maven-pom" value="" />
     <property name="libs.spring-webmvc3.0.maven-pom" value="" />
     <property name="libs.swing-layout.maven-pom" value="" />
-    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner BoardImplTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/test/results/TEST-BoardImplTest.xml crashfile=/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/junitvmwatcher4625409087910278018.properties propsfile=/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/junit7759974777743959573.properties" />
+    <property name="sun.java.command" value="org.apache.tools.ant.taskdefs.optional.junit.JUnitTestRunner BoardImplTest skipNonTests=false filtertrace=true haltOnError=false haltOnFailure=false showoutput=true outputtoformatters=true logfailedtests=true threadid=0 logtestlistenerevents=true formatter=org.apache.tools.ant.taskdefs.optional.junit.BriefJUnitResultFormatter formatter=org.apache.tools.ant.taskdefs.optional.junit.XMLJUnitResultFormatter,/home/alistair/Documents/Git/Oware/Oware/build/test/results/TEST-BoardImplTest.xml crashfile=/home/alistair/Documents/Git/Oware/Oware/build/junitvmwatcher1734282562043352723.properties propsfile=/home/alistair/Documents/Git/Oware/Oware/build/junit7677895366802348780.properties" />
     <property name="build.classes.dir" value="build/classes" />
     <property name="netbeans.accept_license_class" value="org.netbeans.license.AcceptLicense" />
     <property name="build.sysclasspath" value="ignore" />
@@ -125,7 +125,7 @@
     <property name="libs.spring-framework400.src" value="" />
     <property name="libs.PostgreSQLDriver.src" value="" />
     <property name="sun.arch.data.model" value="64" />
-    <property name="basedir" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware" />
+    <property name="basedir" value="/home/alistair/Documents/Git/Oware/Oware" />
     <property name="libs.jpa20-persistence.maven-pom" value="" />
     <property name="jar.compress" value="false" />
     <property name="libs.javaee-web-api-7.0.classpath" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/javaee-web-api-7.0.jar" />
@@ -172,7 +172,7 @@
     <property name="libs.spring-webmvc4.0.maven-pom" value="" />
     <property name="libs.spring-framework300.src" value="" />
     <property name="libs.jstl.src" value="" />
-    <property name="empty.dir" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/empty" />
+    <property name="empty.dir" value="/home/alistair/Documents/Git/Oware/Oware/build/empty" />
     <property name="version-output" value="java version &quot;1.8" />
     <property name="test.binarytestincludes" value="" />
     <property name="libs.hibernate4-persistencemodelgen.src" value="" />
@@ -213,7 +213,7 @@
     <property name="libs.jsp-compiler.classpath" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/ant/extra/jspcompile.jar" />
     <property name="javac.processorpath" value="" />
     <property name="javac.compilerargs" value="" />
-    <property name="ant.file" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build.xml" />
+    <property name="ant.file" value="/home/alistair/Documents/Git/Oware/Oware/build.xml" />
     <property name="libs.beans-binding.maven-pom" value="" />
     <property name="libs.hibernate4-support.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/docs/javax.persistence-2.1.0-doc.zip" />
     <property name="libs.jsf12.classpath" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/jsf-1_2/commons-beanutils.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/jsf-1_2/commons-collections.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/jsf-1_2/commons-digester.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/jsf-1_2/commons-logging.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/jsf-1_2/jsf-api.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/jsf-1_2/jsf-impl.jar" />
@@ -244,7 +244,6 @@
     <property name="libs.DataBindingME-SVG.src" value="/home/alistair/Applications/netbeans-8.0.2/mobility/sources/netbeans_databindingme_svg-src.zip" />
     <property name="dist.jar" value="dist/Oware.jar" />
     <property name="libs.spring-framework400.maven-pom" value="" />
-    <property name="netbeans.automatic.build" value="true" />
     <property name="java.runtime.name" value="Java(TM) SE Runtime Environment" />
     <property name="ant.project.name" value="Oware" />
     <property name="netbeans.hash.code" value="unique=NB_CND_EXTIDE_GFMOD_GROOVY_JAVA_MOB_PHP_WEBCOMMON_WEBEE039605fa4-ed21-4405-8cd9-b68830d32536_0eb901fd-f80f-411c-8be5-118b12080d03" />
@@ -288,17 +287,17 @@
     <property name="annotation.processing.processor.options" value="" />
     <property name="libs.testng.maven-pom" value="" />
     <property name="libs.jaxb.src" value="" />
-    <property name="work.dir" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware" />
+    <property name="work.dir" value="/home/alistair/Documents/Git/Oware/Oware" />
     <property name="libs.jaxb.classpath" value="/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/jaxb-impl.jar:/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/jaxb-xjc.jar:/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/jaxb1-impl.jar:/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/activation.jar:/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/api/jaxb-api.jar:/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/api/jsr173_1.0_api.jar" />
     <property name="do.depend" value="false" />
     <property name="dist.javadoc.dir" value="dist/javadoc" />
     <property name="libs.j2me_common_ant.classpath" value="/home/alistair/Applications/netbeans-8.0.2/mobility/modules/org-netbeans-modules-j2me-common-ant.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/org-netbeans-modules-classfile.jar" />
-    <property name="libs.spring-webmvc3.0.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-webmvc-3.2.7.RELEASE.jar" />
     <property name="libs.swing-layout.classpath" value="/home/alistair/Applications/netbeans-8.0.2/platform/modules/ext/swing-layout-1.0.4.jar" />
+    <property name="libs.spring-webmvc3.0.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-webmvc-3.2.7.RELEASE.jar" />
     <property name="libs.javaee-web-api-7.0.maven-pom" value="" />
     <property name="libs.restlib.src" value="" />
-    <property name="javac.source" value="1.8" />
     <property name="build.generated.dir" value="build/generated" />
+    <property name="javac.source" value="1.7" />
     <property name="line.separator" value="&#xa;" />
     <property name="java.specification.version" value="1.8" />
     <property name="java.vm.info" value="mixed mode" />
@@ -306,13 +305,13 @@
     <property name="nb.junit.batch" value="true" />
     <property name="junit.forkmode" value="perTest" />
     <property name="sun.boot.class.path" value="/usr/lib/jvm/java-8-oracle/jre/lib/resources.jar:/usr/lib/jvm/java-8-oracle/jre/lib/rt.jar:/usr/lib/jvm/java-8-oracle/jre/lib/sunrsasign.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jsse.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jce.jar:/usr/lib/jvm/java-8-oracle/jre/lib/charsets.jar:/usr/lib/jvm/java-8-oracle/jre/lib/jfr.jar:/usr/lib/jvm/java-8-oracle/jre/classes" />
-    <property name="javac.target" value="1.8" />
-    <property name="built-jar.properties" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/built-jar.properties" />
+    <property name="javac.target" value="1.7" />
+    <property name="built-jar.properties" value="/home/alistair/Documents/Git/Oware/Oware/build/built-jar.properties" />
     <property name="build.test.classes.dir" value="build/test/classes" />
     <property name="src.dir" value="src" />
     <property name="libs.jpa2-persistence.src" value="" />
     <property name="annotation.processing.enabled" value="true" />
-    <property name="ant.file.Oware-impl" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/nbproject/build-impl.xml" />
+    <property name="ant.file.Oware-impl" value="/home/alistair/Documents/Git/Oware/Oware/nbproject/build-impl.xml" />
     <property name="libs.jsf20.src" value="" />
     <property name="libs.jpa20-persistence.src" value="" />
     <property name="libs.DataBindingME-SVG.maven-pom" value="" />
@@ -341,19 +340,19 @@
     <property name="do.jar" value="true" />
     <property name="libs.javaee-endorsed-api-6.0.maven-pom" value="" />
     <property name="netbeans.dirs" value="/home/alistair/Applications/netbeans-8.0.2/nb:/home/alistair/Applications/netbeans-8.0.2/ergonomics:/home/alistair/Applications/netbeans-8.0.2/ide:/home/alistair/Applications/netbeans-8.0.2/extide:/home/alistair/Applications/netbeans-8.0.2/java:/home/alistair/Applications/netbeans-8.0.2/apisupport:/home/alistair/Applications/netbeans-8.0.2/webcommon:/home/alistair/Applications/netbeans-8.0.2/websvccommon:/home/alistair/Applications/netbeans-8.0.2/enterprise:/home/alistair/Applications/netbeans-8.0.2/mobility:/home/alistair/Applications/netbeans-8.0.2/profiler:/home/alistair/Applications/netbeans-8.0.2/python:/home/alistair/Applications/netbeans-8.0.2/php:/home/alistair/Applications/netbeans-8.0.2/identity:/home/alistair/Applications/netbeans-8.0.2/harness:/home/alistair/Applications/netbeans-8.0.2/cnd:/home/alistair/Applications/netbeans-8.0.2/dlight:/home/alistair/Applications/netbeans-8.0.2/groovy:/home/alistair/Applications/netbeans-8.0.2/extra:/home/alistair/Applications/netbeans-8.0.2/javacard:/home/alistair/Applications/netbeans-8.0.2/javafx:" />
-    <property name="libs.jstl.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/docs/javaee-doc-api.jar" />
     <property name="libs.jsf20.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/docs/javaee-doc-api.jar" />
+    <property name="libs.jstl.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/docs/javaee-doc-api.jar" />
     <property name="java.ext.dirs" value="/usr/lib/jvm/java-8-oracle/jre/lib/ext:/usr/java/packages/lib/ext" />
     <property name="libs.metro.src" value="" />
     <property name="endorsed.classpath" value="" />
     <property name="libs.absolutelayout.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/AbsoluteLayout.jar" />
     <property name="excludes" value="" />
-    <property name="libs.metro.classpath" value="/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/activation.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-api.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-extra-api.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-extra.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-rt.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-tools.jar" />
     <property name="libs.restlib.maven-pom" value="" />
+    <property name="libs.metro.classpath" value="/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/jaxb/activation.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-api.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-extra-api.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-extra.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-rt.jar:/home/alistair/Applications/netbeans-8.0.2/enterprise/modules/ext/metro/webservices-tools.jar" />
     <property name="libs.jpa2-persistence.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/docs/javax.persistence-2.1.0-doc.zip" />
     <property name="libs.DataBindingME.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/mobility/modules/docs/netbeans_databindingme-api.zip" />
-    <property name="java.class.path" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/classes:/home/alistair/Applications/netbeans-8.0.2/platform/modules/ext/junit-4.10.jar:/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build/test/classes:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant-launcher.jar:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant.jar:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant-junit.jar:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant-junit4.jar" />
     <property name="apple.laf.useScreenMenuBar" value="true" />
+    <property name="java.class.path" value="/home/alistair/Documents/Git/Oware/Oware/build/classes:/home/alistair/Applications/netbeans-8.0.2/platform/modules/ext/junit-4.10.jar:/home/alistair/Documents/Git/Oware/Oware/build/test/classes:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant-launcher.jar:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant.jar:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant-junit.jar:/home/alistair/Applications/netbeans-8.0.2/extide/ant/lib/ant-junit4.jar" />
     <property name="do.mkdist" value="true" />
     <property name="libs.absolutelayout.src" value="" />
     <property name="libs.jpa20-persistence.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/eclipselink/javax.persistence_2.1.0.v201304241213.jar" />
@@ -372,7 +371,7 @@
     <property name="libs.eclipselink.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/eclipselink/eclipselink.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/eclipselink/javax.persistence_2.1.0.v201304241213.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/eclipselink/org.eclipse.persistence.jpa.jpql_2.5.2.v20140319-9ad6abd.jar" />
     <property name="libs.beans-binding.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/java/docs/beansbinding-1.2.1-doc.zip" />
     <property name="java.awt.graphicsenv" value="sun.awt.X11GraphicsEnvironment" />
-    <property name="ant.file.Oware" value="/home/alistair/Google Drive/Uni Stuff/Computer Science/Introduction to Programming/End of Year Programming Exercise/Oware/build.xml" />
+    <property name="ant.file.Oware" value="/home/alistair/Documents/Git/Oware/Oware/build.xml" />
     <property name="java.vm.vendor" value="Oracle Corporation" />
     <property name="libs.CopyLibs.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/ant/extra/org-netbeans-modules-java-j2seproject-copylibstask.jar" />
     <property name="libs.spring-framework300.classpath" value="/home/alistair/Applications/netbeans-8.0.2/ide/modules/org-apache-commons-logging.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/cglib-2.2.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-aop-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-aspects-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-beans-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-build-src-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-context-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-context-support-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-core-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-expression-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-framework-bom-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-instrument-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-instrument-tomcat-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-jdbc-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-jms-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-orm-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-oxm-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-struts-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-test-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-tx-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-web-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-webmvc-3.2.7.RELEASE.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/spring-3.0/spring-webmvc-portlet-3.2.7.RELEASE.jar" />
@@ -381,8 +380,8 @@
     <property name="libs.hibernate4-persistence.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/antlr-2.7.7.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/c3p0-0.9.2.1.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-c3p0-4.3.1.Final.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/mchange-commons-java-0.2.3.4.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/dom4j-1.6.1.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/ehcache-core-2.4.3.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-ehcache-4.3.1.Final.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-core-4.3.1.Final.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/jboss-logging-3.1.3.GA.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-commons-annotations-4.0.4.Final.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-entitymanager-4.3.1.Final.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/javassist-3.18.1-GA.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/jboss-transaction-api_1.2_spec-1.0.0.Final.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/slf4j-api-1.6.1.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/slf4j-simple-1.6.1.jar:/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-jpa-2.1-api-1.0.0.Final.jar" />
     <property name="libs.JAXB-ENDORSED.src" value="" />
     <property name="dist.archive.excludes" value="" />
-    <property name="libs.testng.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/platform/docs/testng-6.8.1-javadoc.zip" />
     <property name="libs.DataBindingME-PIM.src" value="/home/alistair/Applications/netbeans-8.0.2/mobility/sources/netbeans_databindingme_pim-src.zip" />
+    <property name="libs.testng.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/platform/docs/testng-6.8.1-javadoc.zip" />
     <property name="libs.PostgreSQLDriver.classpath" value="/home/alistair/Applications/netbeans-8.0.2/ide/modules/ext/postgresql-9.2-1002.jdbc4.jar" />
     <property name="libs.jsf12.maven-pom" value="" />
     <property name="libs.hibernate4-persistencemodelgen.classpath" value="/home/alistair/Applications/netbeans-8.0.2/java/modules/ext/hibernate4/hibernate-jpamodelgen-4.3.1.Final.jar" />
@@ -402,87 +401,24 @@
     <property name="awt.toolkit" value="sun.awt.X11.XToolkit" />
     <property name="libs.javaee-web-api-7.0.javadoc" value="/home/alistair/Applications/netbeans-8.0.2/enterprise/docs/javaee-doc-api.jar" />
   </properties>
-  <testcase classname="BoardImplTest" name="testIndexToHouseConversion" time="0.002" />
-  <testcase classname="BoardImplTest" name="testGetSeeds" time="0.0" />
-  <testcase classname="BoardImplTest" name="testMakeMove" time="0.0" />
-  <testcase classname="BoardImplTest" name="testToString" time="0.005">
-    <failure message="expected:&lt;[]&gt; but was:&lt;[House 1 has 4 seeds.&#xa;House 2 has 4 seeds.&#xa;House 3 has 4 seeds.&#xa;House 4 has 4 seeds.&#xa;House 5 has 4 seeds.&#xa;House 6 has 4 seeds.&#xa;House 7 has 4 seeds.&#xa;House 8 has 4 seeds.&#xa;House 9 has 4 seeds.&#xa;House 10 has 4 seeds.&#xa;House 11 has 4 seeds.&#xa;House 12 has 4 seeds.&#xa;]&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;[]&gt; but was:&lt;[House 1 has 4 seeds.
-House 2 has 4 seeds.
-House 3 has 4 seeds.
-House 4 has 4 seeds.
-House 5 has 4 seeds.
-House 6 has 4 seeds.
-House 7 has 4 seeds.
-House 8 has 4 seeds.
-House 9 has 4 seeds.
-House 10 has 4 seeds.
-House 11 has 4 seeds.
-House 12 has 4 seeds.
-]&gt;
-	at BoardImplTest.testToString(BoardImplTest.java:444)
-</failure>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testHashCode" time="0.001">
-    <failure message="expected:&lt;0&gt; but was:&lt;-46191576&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;0&gt; but was:&lt;-46191576&gt;
-	at BoardImplTest.testHashCode(BoardImplTest.java:458)
-</failure>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testEquals" time="0.001">
-    <failure message="The test case is a prototype." type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: The test case is a prototype.
-	at BoardImplTest.testEquals(BoardImplTest.java:475)
-</failure>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testIndexToPlayerConversion" time="0.001" />
+  <testcase classname="BoardImplTest" name="testMakeMove" time="0.003" />
+  <testcase classname="BoardImplTest" name="testEquals" time="0.0" />
+  <testcase classname="BoardImplTest" name="testIndexToHouseConversion" time="0.0" />
+  <testcase classname="BoardImplTest" name="testIndexToPlayerConversion" time="0.0" />
   <testcase classname="BoardImplTest" name="testHouseToIndexConversion" time="0.0" />
-  <testcase classname="BoardImplTest" name="testSowSeed" time="0.0" />
-  <testcase classname="BoardImplTest" name="testSetSeeds" time="0.0">
-    <error message="Invalid input - Player number out of range" type="InvalidHouseException">InvalidHouseException: Invalid input - Player number out of range
-	at BoardImpl.checkInvalidHouse(BoardImpl.java:271)
-	at BoardImpl.setSeeds(BoardImpl.java:182)
-	at BoardImplTest.testSetSeeds(BoardImplTest.java:373)
-</error>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testGetScore" time="0.001">
-    <error message="playerNum should be 1 or 2" type="java.lang.IllegalArgumentException">java.lang.IllegalArgumentException: playerNum should be 1 or 2
-	at BoardImpl.getScore(BoardImpl.java:195)
-	at BoardImplTest.testGetScore(BoardImplTest.java:387)
-</error>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testAddScore" time="0.001">
-    <failure message="The test case is a prototype." type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: The test case is a prototype.
-	at BoardImplTest.testAddScore(BoardImplTest.java:404)
-</failure>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testSetScore" time="0.001">
-    <failure message="The test case is a prototype." type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: The test case is a prototype.
-	at BoardImplTest.testSetScore(BoardImplTest.java:418)
-</failure>
-  </testcase>
-  <testcase classname="BoardImplTest" name="testClone" time="0.001">
-    <failure message="expected:&lt;null&gt; but was:&lt;House 1 has 4 seeds.&#xa;House 2 has 4 seeds.&#xa;House 3 has 4 seeds.&#xa;House 4 has 4 seeds.&#xa;House 5 has 4 seeds.&#xa;House 6 has 4 seeds.&#xa;House 7 has 4 seeds.&#xa;House 8 has 4 seeds.&#xa;House 9 has 4 seeds.&#xa;House 10 has 4 seeds.&#xa;House 11 has 4 seeds.&#xa;House 12 has 4 seeds.&#xa;&gt;" type="junit.framework.AssertionFailedError">junit.framework.AssertionFailedError: expected:&lt;null&gt; but was:&lt;House 1 has 4 seeds.
-House 2 has 4 seeds.
-House 3 has 4 seeds.
-House 4 has 4 seeds.
-House 5 has 4 seeds.
-House 6 has 4 seeds.
-House 7 has 4 seeds.
-House 8 has 4 seeds.
-House 9 has 4 seeds.
-House 10 has 4 seeds.
-House 11 has 4 seeds.
-House 12 has 4 seeds.
-&gt;
-	at BoardImplTest.testClone(BoardImplTest.java:430)
-</failure>
-  </testcase>
-  <system-out><![CDATA[indexToHouseConversion
-getSeeds
-makeMove
-toString
-hashCode
+  <testcase classname="BoardImplTest" name="testGetSeeds" time="0.0" />
+  <testcase classname="BoardImplTest" name="testSowSeed" time="0.001" />
+  <testcase classname="BoardImplTest" name="testSetSeeds" time="0.0" />
+  <testcase classname="BoardImplTest" name="testGetScore" time="0.001" />
+  <testcase classname="BoardImplTest" name="testAddScore" time="0.0" />
+  <testcase classname="BoardImplTest" name="testSetScore" time="0.0" />
+  <testcase classname="BoardImplTest" name="testClone" time="0.0" />
+  <system-out><![CDATA[makeMove
 equals
+indexToHouseConversion
 indexToPlayerConversion
 houseToIndexConversion
+getSeeds
 sowSeed
 setSeeds
 getScore

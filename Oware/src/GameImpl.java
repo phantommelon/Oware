@@ -48,6 +48,8 @@ public class GameImpl implements Game, Serializable {
         this.player1 = player1;
         this.player2 = player2;
         
+        player1Name = "Player 1";
+        player2Name = "Player 2";
         board = new BoardImpl();
         turn = 1;
         previousBoards = new ArrayList<>();
@@ -306,10 +308,6 @@ public class GameImpl implements Game, Serializable {
      * @param playerName a String to assign to the player.
      */
     public void setPlayerName(int playerNum, String playerName) {
-        
-        if(playerName.equals("Player")) {
-            playerName = "Player " + playerNum;
-        }
         
         if(playerNum == 1) {
             this.player1Name = playerName;
