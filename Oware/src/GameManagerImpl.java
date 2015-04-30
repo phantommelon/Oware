@@ -26,6 +26,13 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Class to manage the game.
@@ -74,7 +81,7 @@ public class GameManagerImpl implements GameManager {
             } 
             catch (FileNotFoundException ex) {
                 throw new FileFailedException("File " + path + " not found. " +
-                        "Please try again.\n");
+                        "Please try again.");
             }
             
             List<String> lines = new ArrayList<>();
@@ -83,44 +90,93 @@ public class GameManagerImpl implements GameManager {
                 lines.add(loadScanner.nextLine());
             }
             
-            // Check for files of 8 lines long.
-            if(!(lines.size() == 8)) {
-                throw new FileFailedException("File is malformatted. Please " +
-                        "check the right file was selected.\n");
+            FileFailedException fileFormatFailed = new FileFailedException(
+                    "File " + path + " is either of incorrect format, or is " +
+                    "corrupt. Please check the file and try again.");
+            
+            // Check for files of 9 lines long. (Could still be 9 lines long but
+            // rubbish...)
+            if(!(lines.size() == 9)) {
+                throw fileFormatFailed;
             }
             
-            // Fields that need to be determined to recreate game.
-            Board currentBoard = processBoardString(lines.get(0));
+            // Check first line (current board state) can be parsed.
+            Board currentBoard;
+            
+            try {
+                currentBoard = processBoardString(lines.get(0));
+            }
+            catch (NumberFormatException nfe) {
+                throw fileFormatFailed;
+            }
+            
+            // Check second and third line are as expected.
             String player1Type = lines.get(1);
-            String player2Type = lines.get(2);           
+            String player2Type = lines.get(2);
             Player player1;
             Player player2;
-            Byte turn = Byte.parseByte(lines.get(5));
-            int consecutiveMoves = Integer.parseInt(lines.get(6));
-            boolean gameOver = Boolean.getBoolean(lines.get(7));
-            List<Board> prevousBoards = new ArrayList<>();
             
-            // Strings needing further analysis.
-            String player1Name = lines.get(3);
-            String player2Name = lines.get(4);
-            String[] previousBoardStrings = lines.get(8).split(";");
-            
-            for(String previousBoard : previousBoardStrings) {
-                prevousBoards.add(processBoardString(previousBoard));
-            }
-
             if(player1Type.equals("HumanPlayer")) {
                 player1 = new HumanPlayer();
             }
-            else {
+            else if(player1Type.equals("ComputerPlayer")) {
                 player1 = new ComputerPlayer();
+            }
+            else {
+                throw fileFormatFailed;
             }
             
             if(player2Type.equals("HumanPlayer")) {
                 player2 = new HumanPlayer();
             }
-            else {
+            else if(player2Type.equals("ComputerPlayer")) {
                 player2 = new ComputerPlayer();
+            }
+            else {
+                throw fileFormatFailed;
+            }
+            
+            // As the players can be called anything at all, any String will do.
+            String player1Name = lines.get(3);
+            String player2Name = lines.get(4);
+            
+            // Check fifth and sixth lines can be processed.
+            Byte turn;
+            int consecutiveMoves;
+            
+            try {
+                turn = Byte.parseByte(lines.get(5));
+                consecutiveMoves = Integer.parseInt(lines.get(6));
+            }
+            catch (NumberFormatException ex) {
+                throw fileFormatFailed;
+            }
+            
+            // Check seventh line is "true" or "false";
+            boolean gameOver;
+            
+            if(lines.get(7).equals("true")) {
+                gameOver = true;
+            }
+            else if(lines.get(7).equals("false")) {
+                gameOver = false;
+            }
+            else {
+                throw fileFormatFailed;
+            }
+            
+            List<Board> prevousBoards = new ArrayList<>();
+            
+            // Split the eighth line into boards. Ensure each is correct.
+            String[] previousBoardStrings = lines.get(8).split(";");
+            
+            try {
+                for(String previousBoard : previousBoardStrings) {
+                    prevousBoards.add(processBoardString(previousBoard));
+                }
+            }
+            catch(NumberFormatException nfe) {
+                throw fileFormatFailed;
             }
             
             player1.setIn(in);
@@ -133,7 +189,8 @@ public class GameManagerImpl implements GameManager {
                     prevousBoards);
         }
         else {
-            throw new FileFailedException("The file specified does not exist.");
+            throw new FileFailedException("File " + path + " not found. " +
+                        "Please try again.");
         }
     }
 
@@ -231,12 +288,35 @@ public class GameManagerImpl implements GameManager {
             
             out.println();
             
-            try {
-                game.nextMove();
-            } 
-            catch(InvalidHouseException | InvalidMoveException |
-                    IllegalArgumentException | IllegalStateException ex) {
-                out.println(ex.getMessage());
+            // Check if the player is human, if not, they are a computer.
+            if(game.getCurrentPlayer().getClass().getCanonicalName().equals(
+                    "HumanPlayer")) {
+                try {
+                    game.nextMove();
+                } 
+                catch(InvalidHouseException | InvalidMoveException |
+                        IllegalArgumentException | IllegalStateException ex) {
+                    out.println(ex.getMessage());
+                }
+            }
+            else {
+                
+                // Use concurrency to handle computer timeout.
+                ExecutorService handler = Executors.newSingleThreadExecutor();
+                Future<Void> future = handler.submit(new ComputerMove(game));
+                
+                try {
+                    future.get(1, TimeUnit.SECONDS);
+                }
+                // Computer player's makeMove has thrown an exception or elapsed
+                // 1 second computation time - forfeit game.
+                catch (ExecutionException | TimeoutException ex) {
+                    return 3 - game.getCurrentPlayerNum();
+                } 
+                catch (InterruptedException ex) {
+                    throw new IllegalArgumentException(ex.getMessage());
+                }
+                
             }
         }
         
@@ -286,6 +366,7 @@ public class GameManagerImpl implements GameManager {
                 }
                 catch(QuitGameException qge) {
                     out.println(qge.getMessage() + "\n");
+                    continue;
                 }
 
                 displayResults(result);
@@ -300,6 +381,7 @@ public class GameManagerImpl implements GameManager {
                     } 
                     catch (FileFailedException ex) {
                         out.println(ex.getMessage() + "\n");
+                        continue;
                     }
                 }
                 else {
@@ -477,6 +559,7 @@ public class GameManagerImpl implements GameManager {
         
         int player1Score = Integer.parseInt(scoreString.split(" ")[0]);
         int player2Score = Integer.parseInt(scoreString.split(" ")[1]);
+        
         int[] houseInts = new int[12];
         
         for(int i = 0; i < 12; i++) {
@@ -493,6 +576,27 @@ public class GameManagerImpl implements GameManager {
         }
         else {
             out.println("The game was a draw!\n");
+        }
+    }
+    
+    /**
+     * An inner class implementing Callable.
+     * <p>
+     * Class has call method (analogous to Runnable's run) that allows game.
+     * nextMove to run and throw exceptions in a new thread.
+     */
+    private class ComputerMove implements Callable<Void> {
+
+        Game game;
+        
+        private ComputerMove(Game game) {
+            this.game = game;
+        }
+
+        @Override
+        public Void call() throws Exception {
+            game.nextMove();
+            return null;
         }
     }
     
@@ -526,5 +630,7 @@ public class GameManagerImpl implements GameManager {
             gameManager.manage(System.in, System.out);
         }
     }
+
+
     
 }

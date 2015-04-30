@@ -19,11 +19,8 @@
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * An object to give a user playable player to the game.
@@ -42,6 +39,8 @@ public class HumanPlayer implements Player, Serializable {
     
     @Override
     public int getMove(Board b, int playerNum) throws QuitGameException {
+        
+        scanner = new Scanner(input);
         
         int move = 0;
         
@@ -97,7 +96,6 @@ public class HumanPlayer implements Player, Serializable {
     @Override
     public void setIn(InputStream input) {
         this.input = input;
-        this.scanner = new Scanner(input);
     }
 
     @Override
