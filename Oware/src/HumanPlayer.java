@@ -18,9 +18,6 @@
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -54,34 +51,49 @@ public class HumanPlayer implements Player {
                 return move;
             }
             catch(NumberFormatException nfe) {
-                List<String> inputStrings = new ArrayList(Arrays.asList(
-                        nfe.getMessage().split("\"")));
                 
-                inputStrings.remove(0);
+                // Get the user's input from the error message.
+                String inputString = nfe.getMessage().split("\"", 2)[1].
+                        replace("\"", "");
                 
-                // Check is empty to catch "s being entered.
-                if(!inputStrings.isEmpty() && 
-                        inputStrings.get(0).equals("QUIT")) {
+                if(inputString.equals("QUIT")) {
                     throw new QuitGameException("Quitting to the main menu...");
                 }
                 
-                // See if the user was trying to issue a main menu command.
-                else if(!inputStrings.isEmpty() &&
-                        (inputStrings.get(0).equals("NEW") ||
-                        inputStrings.get(0).equals("LOAD") ||
-                        inputStrings.get(0).equals("SAVE") ||
-                        inputStrings.get(0).equals("EXIT"))) {
+                else if(inputString.equals("quit")) {
+                    throw new IllegalArgumentException("Invalid input - A " +
+                            "command should be fully capitalised, for " +
+                            "example QUIT.");
+                }
+                
+                else if(inputString.toLowerCase().contains(
+                        "quit")) {
                     
-                    throw new IllegalStateException("Invalid input - " +
-                            inputStrings.get(0) + " is a main menu command. " +
-                            "Please enter QUIT to return to the main menu " +
-                            "before using this command.");
+                    throw new IllegalArgumentException("Invalid input - To " +
+                            "quit to the main menu, please enter the QUIT " +
+                            "command by itself with no additional commands " +
+                            "either before or after the QUIT command.");
+                }
+                
+                // User looks as if they wanted to use a main menu command of
+                // some form.
+                else if(inputString.toLowerCase().contains("new") ||
+                        inputString.toLowerCase().contains("load") || 
+                        inputString.toLowerCase().contains("save") ||
+                        inputString.toLowerCase().contains("exit")) {
+                    
+                    throw new IllegalStateException("Invalid input - The " +
+                            "input contains a main menu command. Please " +
+                            "enter QUIT to return to the main menu before " +
+                            "using this command. Please note that all " +
+                            "commands are fully capitalised.");
                 }
                 
                 // The user has entered nothing of value.
                 else {
                     throw new IllegalArgumentException("Invalid input - " +
-                            "Please enter a value from 1 to 6 (inclusive).");
+                            "Please enter a value from 1 to 6 (inclusive) or " +
+                            "QUIT to return to the main menu.");
                 }
             }
         }

@@ -16,7 +16,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.io.Serializable;
 import java.util.Arrays;
 
 /**
@@ -27,7 +26,7 @@ import java.util.Arrays;
  * @author Alistair Madden
  * @version 0.4
  */
-public class BoardImpl implements Board, Serializable {
+public class BoardImpl implements Board {
     
     private final int[] houses;
     private int p1Score;
@@ -174,8 +173,8 @@ public class BoardImpl implements Board, Serializable {
      * 
      * @param house the house number for this player
      * @param playerNum the player's number (1 or 2)
-     * @return an <code>int</code> representing the index of the specified house in the
-     * houses array.
+     * @return an <code>int</code> representing the index of the specified house
+     * in the houses array.
      */
     public int houseToIndexConversion(int house, int playerNum) {
         
@@ -219,11 +218,8 @@ public class BoardImpl implements Board, Serializable {
         if(playerNum == 1) {
             return p1Score;
         }
-        else if(playerNum == 2) {
-            return p2Score;
-        }
         else {
-            throw new IllegalArgumentException("playerNum should be 1 or 2");
+            return p2Score;
         }
     }
 
@@ -315,7 +311,7 @@ public class BoardImpl implements Board, Serializable {
         if(!(house < 7 && house > 0)) {
             throw new InvalidHouseException("Invalid input - House number " +
                     "out of range. Please enter a value from 1 to 6 " +
-                    "(inclusive).\n");
+                    "(inclusive).");
         }
     }
     
@@ -363,7 +359,6 @@ public class BoardImpl implements Board, Serializable {
                     "take a value greater than the maximum number of seeds " +
                     "in play.\n");
         }
-        
     }
 
 }

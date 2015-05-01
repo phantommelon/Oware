@@ -45,21 +45,19 @@ import java.util.concurrent.TimeoutException;
 public class GameManagerImpl implements GameManager {
     
     private Game game;
-    private String mainMenu;
     private InputStream in;
     private PrintStream out;
     private Scanner scanner;
-    
+    private String mainMenu = 
+            "|| Main menu                               ||\n" +
+            "||-----------------------------------------||\n" +
+            "|| NEW - Start a new game of Oware         ||\n" +
+            "|| LOAD - Load a previous game of Oware    ||\n" +
+            "|| SAVE - Save progress of current game    ||\n" +
+            "|| EXIT - Close the program without saving ||\n";
+            
     public GameManagerImpl() {
         
-        mainMenu = new String();
-        
-        mainMenu += "|| " + "Main menu" + "                               ||\n";
-        mainMenu += "||-" + "-------------------------------" + "---------||\n";
-        mainMenu += "|| " + "NEW - Start a new game of Oware" + "         ||\n";
-        mainMenu += "|| " + "LOAD - Load a previous game of Oware" + "    ||\n";
-        mainMenu += "|| " + "SAVE - Save progress of current game" + "    ||\n";
-        mainMenu += "|| " + "EXIT - Close the program without saving" + " ||\n";
     }
     
     @Override
@@ -92,9 +90,9 @@ public class GameManagerImpl implements GameManager {
                 "File " + path + " is either of incorrect format, or is " +
                 "corrupt. Please check the file and try again.");
 
-        // Check for files of 9 lines long. (Could still be 9 lines long but
+        // Check for files of 8-9 lines long. (Could still be 9 lines long but
         // rubbish...)
-        if(!(lines.size() == 9)) {
+        if(!(lines.size() == 9 || lines.size() == 8)) {
             throw fileFormatFailed;
         }
 
@@ -138,7 +136,7 @@ public class GameManagerImpl implements GameManager {
         String player1Name = lines.get(3);
         String player2Name = lines.get(4);
 
-        // Check fifth and sixth lines can be processed.
+        // Check sixth and seventh lines can be processed.
         Byte turn;
         int consecutiveMoves;
 
@@ -150,7 +148,7 @@ public class GameManagerImpl implements GameManager {
             throw fileFormatFailed;
         }
 
-        // Check seventh line is "true" or "false";
+        // Check eighth line is "true" or "false";
         boolean gameOver;
 
         if(lines.get(7).equals("true")) {
@@ -162,24 +160,39 @@ public class GameManagerImpl implements GameManager {
         else {
             throw fileFormatFailed;
         }
-
+        
         List<Board> prevousBoards = new ArrayList<>();
+        
+        if(lines.size() == 9) {
+            // Split the ninth line into boards. Ensure each is correct.
+            String[] previousBoardStrings = lines.get(8).split(";");
 
-        // Split the eighth line into boards. Ensure each is correct.
-        String[] previousBoardStrings = lines.get(8).split(";");
-
-        try {
-            for(String previousBoard : previousBoardStrings) {
-                prevousBoards.add(processBoardString(previousBoard));
+            try {
+                for(String previousBoard : previousBoardStrings) {
+                    prevousBoards.add(processBoardString(previousBoard));
+                }
+            }
+            catch(NumberFormatException nfe) {
+                throw fileFormatFailed;
             }
         }
-        catch(NumberFormatException nfe) {
-            throw fileFormatFailed;
-        }
+        
 
+        
+
+        // If input or print streams are null (because the game was instantiated
+        // from the command line) then use default System.in and System.out
+        if(in == null) {
+            in = System.in;
+        }
+        
+        if(out == null) {
+            out = System.out;
+        }
+        
         player1.setIn(in);
-        player1.setOut(out);
         player2.setIn(in);
+        player1.setOut(out);
         player2.setOut(out);
 
         this.game = new GameImpl(currentBoard, player1, player2, 
@@ -573,8 +586,10 @@ public class GameManagerImpl implements GameManager {
     
     private void displayResults(int result) {
 
+        GameImpl gameImpl = (GameImpl) this.game;
+        
         if(result != 0) {
-            out.println("Player " + result + " is the winner!\n");
+            out.println(gameImpl.getPlayerName(result) + " is the winner!\n");
         }
         else {
             out.println("The game was a draw!\n");
@@ -608,24 +623,35 @@ public class GameManagerImpl implements GameManager {
         
         if(args.length > 0) {
             
-            String fileName = args[0];
+            String fileName = "";
+                    
+            for(int i = 0; i < args.length; i++) {
+                
+                if(i == 0) {
+                    fileName += args[i];
+                }
+                else {
+                    fileName += " " + args[i];
+                }
+            }
             
             try {
                 gameManager.loadGame(fileName);
             } 
             catch (FileFailedException ex) {
-                System.out.println(ex.getMessage());
-                gameManager.manage(System.in, System.out);
+                System.out.println(ex.getMessage() + "\n");
             }
             
-            try {
-                gameManager.playGame();
-            }
+            if(gameManager.getGame() != null) {
+                try {
+                    gameManager.playGame();
+                }
             
-            catch (QuitGameException ex) {
-                System.out.println(ex.getMessage());
+                catch (QuitGameException ex) {
+                    System.out.println(ex.getMessage() + "\n");
+                }
             }
-            
+
             gameManager.manage(System.in, System.out);
         }
         

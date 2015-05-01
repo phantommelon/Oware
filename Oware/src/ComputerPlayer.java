@@ -18,11 +18,6 @@
 
 import java.io.InputStream;
 import java.io.PrintStream;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * Deterministic Computer Player
@@ -51,10 +46,7 @@ class ComputerPlayer implements Player {
             try {
                 board.makeMove(i + 1, playerNum);
             }
-            catch (InvalidHouseException ex) {
-                continue;
-            } 
-            catch (InvalidMoveException ex) {
+            catch (InvalidHouseException | InvalidMoveException ex) {
                 continue;
             }
 
