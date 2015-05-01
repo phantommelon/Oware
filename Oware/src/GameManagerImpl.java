@@ -71,162 +71,142 @@ public class GameManagerImpl implements GameManager {
     public void loadGame(String fname) throws FileFailedException {
         
         File path = new File(fname);
-        
-        if(path.exists()) {
            
-            Scanner loadScanner;
-            
-            try {
-                loadScanner = new Scanner(path);
-            } 
-            catch (FileNotFoundException ex) {
-                throw new FileFailedException("File " + path + " not found. " +
-                        "Please try again.");
-            }
-            
-            List<String> lines = new ArrayList<>();
-            
-            while(loadScanner.hasNextLine()) {
-                lines.add(loadScanner.nextLine());
-            }
-            
-            FileFailedException fileFormatFailed = new FileFailedException(
-                    "File " + path + " is either of incorrect format, or is " +
-                    "corrupt. Please check the file and try again.");
-            
-            // Check for files of 9 lines long. (Could still be 9 lines long but
-            // rubbish...)
-            if(!(lines.size() == 9)) {
-                throw fileFormatFailed;
-            }
-            
-            // Check first line (current board state) can be parsed.
-            Board currentBoard;
-            
-            try {
-                currentBoard = processBoardString(lines.get(0));
-            }
-            catch (NumberFormatException nfe) {
-                throw fileFormatFailed;
-            }
-            
-            // Check second and third line are as expected.
-            String player1Type = lines.get(1);
-            String player2Type = lines.get(2);
-            Player player1;
-            Player player2;
-            
-            if(player1Type.equals("HumanPlayer")) {
-                player1 = new HumanPlayer();
-            }
-            else if(player1Type.equals("ComputerPlayer")) {
-                player1 = new ComputerPlayer();
-            }
-            else {
-                throw fileFormatFailed;
-            }
-            
-            if(player2Type.equals("HumanPlayer")) {
-                player2 = new HumanPlayer();
-            }
-            else if(player2Type.equals("ComputerPlayer")) {
-                player2 = new ComputerPlayer();
-            }
-            else {
-                throw fileFormatFailed;
-            }
-            
-            // As the players can be called anything at all, any String will do.
-            String player1Name = lines.get(3);
-            String player2Name = lines.get(4);
-            
-            // Check fifth and sixth lines can be processed.
-            Byte turn;
-            int consecutiveMoves;
-            
-            try {
-                turn = Byte.parseByte(lines.get(5));
-                consecutiveMoves = Integer.parseInt(lines.get(6));
-            }
-            catch (NumberFormatException ex) {
-                throw fileFormatFailed;
-            }
-            
-            // Check seventh line is "true" or "false";
-            boolean gameOver;
-            
-            if(lines.get(7).equals("true")) {
-                gameOver = true;
-            }
-            else if(lines.get(7).equals("false")) {
-                gameOver = false;
-            }
-            else {
-                throw fileFormatFailed;
-            }
-            
-            List<Board> prevousBoards = new ArrayList<>();
-            
-            // Split the eighth line into boards. Ensure each is correct.
-            String[] previousBoardStrings = lines.get(8).split(";");
-            
-            try {
-                for(String previousBoard : previousBoardStrings) {
-                    prevousBoards.add(processBoardString(previousBoard));
-                }
-            }
-            catch(NumberFormatException nfe) {
-                throw fileFormatFailed;
-            }
-            
-            player1.setIn(in);
-            player1.setOut(out);
-            player2.setIn(in);
-            player2.setOut(out);
-            
-            this.game = new GameImpl(currentBoard, player1, player2, 
-                    player1Name, player2Name, turn, consecutiveMoves, gameOver, 
-                    prevousBoards);
+        Scanner loadScanner;
+
+        try {
+            loadScanner = new Scanner(path);
+        } 
+        catch (FileNotFoundException ex) {
+            throw new FileFailedException("File " + path + " not found. " +
+                    "Please try again.");
+        }
+
+        List<String> lines = new ArrayList<>();
+
+        while(loadScanner.hasNextLine()) {
+            lines.add(loadScanner.nextLine());
+        }
+
+        FileFailedException fileFormatFailed = new FileFailedException(
+                "File " + path + " is either of incorrect format, or is " +
+                "corrupt. Please check the file and try again.");
+
+        // Check for files of 9 lines long. (Could still be 9 lines long but
+        // rubbish...)
+        if(!(lines.size() == 9)) {
+            throw fileFormatFailed;
+        }
+
+        // Check first line (current board state) can be parsed.
+        Board currentBoard;
+
+        try {
+            currentBoard = processBoardString(lines.get(0));
+        }
+        catch (NumberFormatException nfe) {
+            throw fileFormatFailed;
+        }
+
+        // Check second and third line are as expected.
+        String player1Type = lines.get(1);
+        String player2Type = lines.get(2);
+        Player player1;
+        Player player2;
+
+        if(player1Type.equals("HumanPlayer")) {
+            player1 = new HumanPlayer();
+        }
+        else if(player1Type.equals("ComputerPlayer")) {
+            player1 = new ComputerPlayer();
         }
         else {
-            throw new FileFailedException("File " + path + " not found. " +
-                        "Please try again.");
+            throw fileFormatFailed;
         }
+
+        if(player2Type.equals("HumanPlayer")) {
+            player2 = new HumanPlayer();
+        }
+        else if(player2Type.equals("ComputerPlayer")) {
+            player2 = new ComputerPlayer();
+        }
+        else {
+            throw fileFormatFailed;
+        }
+
+        // As the players can be called anything at all, any String will do.
+        String player1Name = lines.get(3);
+        String player2Name = lines.get(4);
+
+        // Check fifth and sixth lines can be processed.
+        Byte turn;
+        int consecutiveMoves;
+
+        try {
+            turn = Byte.parseByte(lines.get(5));
+            consecutiveMoves = Integer.parseInt(lines.get(6));
+        }
+        catch (NumberFormatException ex) {
+            throw fileFormatFailed;
+        }
+
+        // Check seventh line is "true" or "false";
+        boolean gameOver;
+
+        if(lines.get(7).equals("true")) {
+            gameOver = true;
+        }
+        else if(lines.get(7).equals("false")) {
+            gameOver = false;
+        }
+        else {
+            throw fileFormatFailed;
+        }
+
+        List<Board> prevousBoards = new ArrayList<>();
+
+        // Split the eighth line into boards. Ensure each is correct.
+        String[] previousBoardStrings = lines.get(8).split(";");
+
+        try {
+            for(String previousBoard : previousBoardStrings) {
+                prevousBoards.add(processBoardString(previousBoard));
+            }
+        }
+        catch(NumberFormatException nfe) {
+            throw fileFormatFailed;
+        }
+
+        player1.setIn(in);
+        player1.setOut(out);
+        player2.setIn(in);
+        player2.setOut(out);
+
+        this.game = new GameImpl(currentBoard, player1, player2, 
+                player1Name, player2Name, turn, consecutiveMoves, gameOver, 
+                prevousBoards);
+        
     }
 
     @Override
-    public void saveGame(String fname) {
+    public void saveGame(String fname) throws FileFailedException {
+        
+        if(fname.equals(" ")) {
+            throw new FileFailedException("Invalid input - A SAVE command is " +
+                    "followed by a file name to save the file under.");
+        }
         
         if(game == null) {
-            out.println("Invalid input - no game is currently underway.\n");
-        }
-        else if(game.getResult() != -1) {
-            out.println("Invalid input - this game is finished.\n");
+            throw new FileFailedException("Invalid input - No game is " + 
+                    "currently underway.");
         }
         else {
             
             File path = new File(fname);
             
             if(path.exists()) {
-                
-                out.println("File " + fname + " already exists, do you want " +
-                        "to overwrite? (Y/N)");
-                
-                String saveInput;
-                
-                // Check for user input.
-                do {
-                    saveInput = scanner.nextLine();
-                    
-                    if(saveInput.equalsIgnoreCase("N")) {
-                        return;
-                    }
-                    else if(saveInput.equalsIgnoreCase("Y")) {
-                        break;
-                    }
-                }
-                while(!(saveInput.equalsIgnoreCase("Y") || 
-                        saveInput.equalsIgnoreCase("N")));
+                throw new FileFailedException("Invalid input - File " + fname +
+                        " already exists.");
             }
             
             out.println("Saving...");
@@ -296,7 +276,7 @@ public class GameManagerImpl implements GameManager {
                 } 
                 catch(InvalidHouseException | InvalidMoveException |
                         IllegalArgumentException | IllegalStateException ex) {
-                    out.println(ex.getMessage());
+                    out.println(ex.getMessage() + "\n");
                 }
             }
             else {
@@ -315,6 +295,10 @@ public class GameManagerImpl implements GameManager {
                 } 
                 catch (InterruptedException ex) {
                     throw new IllegalArgumentException(ex.getMessage());
+                }
+                // Get rid of thread generated now it is not needed.
+                finally {
+                    handler.shutdownNow();
                 }
                 
             }
@@ -342,25 +326,33 @@ public class GameManagerImpl implements GameManager {
             out.println(mainMenu);
             out.print("Please enter a command: ");
 
-            String command;
-            
-            command = scanner.nextLine();
+            String scannedInput = scanner.nextLine();
                 
             // Split string from input around a space character.
-            List<String> commands = Arrays.asList(command.split(" "));
+            String[] commands = scannedInput.split(" ", 2);
             
-            // Reusing command.
-            command = commands.get(0);
+            String identifyingCommand = commands[0];
             
-            if(command.equals("NEW")) {
-                try {
-                    this.game = createNewGame(commands);
+            if(identifyingCommand.equals("NEW")) {
+                
+                if(commands.length == 2) {
+                    try {
+                        this.game = createNewGame(commands[1]);
+                    }
+                    catch(IllegalArgumentException ex) {
+                        out.println(ex.getMessage());
+                        continue;
+                    }
                 }
-                catch(IllegalArgumentException ex) {
-                    out.println(ex.getMessage());
+                else {
+                    out.println("Invalid input - A NEW command must be " +
+                            "followed by two further commands, 'Human' or " +
+                            "'Computer' to specify the type of player. " +
+                            "Optionally a colon may be added after the " +
+                            "player type to give a name to that player.\n");
                     continue;
                 }
-
+                
                 try {
                     result = playGame();
                 }
@@ -373,12 +365,13 @@ public class GameManagerImpl implements GameManager {
                 
                 result = -1;
             }
-            else if(command.equals("LOAD")) {
+            
+            else if(identifyingCommand.equals("LOAD")) {
                 
-                if(checkValidIOCommand(commands)) {
+                if(commands.length == 2) {
                     try {
-                        loadGame(commands.get(1));
-                    } 
+                        loadGame(commands[1]);
+                    }
                     catch (FileFailedException ex) {
                         out.println(ex.getMessage() + "\n");
                         continue;
@@ -389,6 +382,7 @@ public class GameManagerImpl implements GameManager {
                             "followed by the file name of the saved game to " +
                             "load. The file name should be separated from " +
                             "the LOAD command by a space.\n");
+                    continue;
                 }
                 
                 try {
@@ -396,28 +390,39 @@ public class GameManagerImpl implements GameManager {
                 }
                 catch(QuitGameException qge) {
                     out.println(qge.getMessage() + "\n");
+                    continue;
                 }
 
                 displayResults(result);
                 
                 result = -1;
             }
-            else if(command.equals("SAVE")) {
-                if(checkValidIOCommand(commands)) {
-                    saveGame(commands.get(1));
+            
+            else if(identifyingCommand.equals("SAVE")) {
+                
+                if(commands.length == 2) {
+                    try {
+                        saveGame(commands[1]);
+                    } 
+                    catch(FileFailedException ex) {
+                        out.println(ex.getMessage() + "\n");
+                    }
                 }
                 else {
-                    out.println("Invalid input - a SAVE command should be  " +
-                            "followed by a file name to save the current " + 
-                            "game under. The file name should be separated " +
-                            "from the SAVE command by a space.\n");
+                    out.println("Invalid input - a SAVE command should be " +
+                            "followed by a file name to save the file under." +
+                            "The file name should be separated from the SAVE " +
+                            "command by a space.\n");
+                    // Unecessary to continue. 
                 }
             }
-            else if(command.equals("EXIT")) {
+            
+            else if(identifyingCommand.equals("EXIT")) {
                 return this.game;
             }
+            
             else {
-                out.println("Invalid input - valid commands are listed " +
+                out.println("Invalid input - Valid commands are listed " +
                         "in the main menu.\n");
             }
         }
@@ -473,74 +478,71 @@ public class GameManagerImpl implements GameManager {
      * If the commands cannot be recognised, an IllegalArgumentException is 
      * thrown.
      * 
-     * @param commands the list of String commands the user has given
+     * @param input the input the user has given following a command.
      * @return a new Game instance, set up according to the commands given
      */
-    private Game createNewGame(List<String> commands) {
+    private Game createNewGame(String input) {
         
-        // Does this really belong here?
         IllegalArgumentException ex = new IllegalArgumentException("Invalid " +
                 "input - A NEW command must be followed by two further " + 
                 "commands, 'Human' or 'Computer' to specify the type of " + 
                 "player. Optionally a colon may be added after the player " + 
                 "type to give a name to the player.\n");
         
+        String[] playerTypes = input.split(" ", 2);
         String[] player1;
         String[] player2;
         Player[] players;
         
-        if(commands.size() == 3) {
-            player1 = commands.get(1).split(":", 2);
-            player2 = commands.get(2).split(":", 2);
-            players = new Player[2];
-            
-            // Player1 creation.
-            if(player1[0].equals("Human")) {
-                players[0] = new HumanPlayer();
-            }
-            else if(player1[0].equals("Computer")) {
-                players[0] = new ComputerPlayer();
-            }
-            else {
-                throw ex;
-            }
-            
-            // Player2 creation
-            if(player2[0].equals("Human")) {
-                players[1] = new HumanPlayer();
-            }
-            else if(player2[0].equals("Computer")) {
-                players[1] = new ComputerPlayer();
-            }
-            else {
-                throw ex;
-            }
-            
-            players[0].setIn(in);
-            players[1].setIn(in);
-            players[0].setOut(out);
-            players[1].setOut(out);
-            
-            GameImpl newGame = new GameImpl(players[0], players[1]);
+        if(playerTypes.length != 2) {
+            throw ex;
+        }
+        
+        player1 = playerTypes[0].split(":", 2);
+        player2 = playerTypes[1].split(":", 2);
+        players = new Player[2];
 
-            // Assigning player names.
-            if(!(player1.length == 1)) {
-                newGame.setPlayerName(1, player1[1]);
-            }
-
-            if(!(player2.length == 1)) {
-                newGame.setPlayerName(2, player2[1]);
-            }
-            
-            return newGame;
+        // Player1 creation.
+        if(player1[0].equals("Human")) {
+            players[0] = new HumanPlayer();
+        }
+        else if(player1[0].equals("Computer")) {
+            players[0] = new ComputerPlayer();
         }
         else {
             throw ex;
         }
-    }
-    
-    private boolean checkValidIOCommand(List<String> commands) {
-        return commands.size() == 2;
+
+        // Player2 creation
+        if(player2[0].equals("Human")) {
+            players[1] = new HumanPlayer();
+        }
+        else if(player2[0].equals("Computer")) {
+            players[1] = new ComputerPlayer();
+        }
+        else {
+            throw ex;
+        }
+
+        players[0].setIn(in);
+        players[1].setIn(in);
+        players[0].setOut(out);
+        players[1].setOut(out);
+
+        GameImpl newGame = new GameImpl(players[0], players[1]);
+
+        // Assigning player names.
+        if(!(player1.length == 1)) {
+            newGame.setPlayerName(1, player1[1]);
+        }
+
+        if(!(player2.length == 1)) {
+            newGame.setPlayerName(2, player2[1]);
+        }
+
+        return newGame;
+
+
     }
     
     /**
@@ -604,8 +606,7 @@ public class GameManagerImpl implements GameManager {
         
         GameManagerImpl gameManager = new GameManagerImpl();
         
-        // Optional launch straight into game -- MODIFY
-        if(args.length != 0) {
+        if(args.length > 0) {
             
             String fileName = args[0];
             
@@ -614,7 +615,7 @@ public class GameManagerImpl implements GameManager {
             } 
             catch (FileFailedException ex) {
                 System.out.println(ex.getMessage());
-                System.exit(4);
+                gameManager.manage(System.in, System.out);
             }
             
             try {
@@ -624,13 +625,13 @@ public class GameManagerImpl implements GameManager {
             catch (QuitGameException ex) {
                 System.out.println(ex.getMessage());
             }
+            
+            gameManager.manage(System.in, System.out);
         }
         
         else {
             gameManager.manage(System.in, System.out);
         }
     }
-
-
     
 }

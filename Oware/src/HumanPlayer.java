@@ -16,7 +16,8 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
-import java.io.*;
+import java.io.InputStream;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -28,7 +29,7 @@ import java.util.Scanner;
  * @author Alistair Madden
  * @version 0.3
  */
-public class HumanPlayer implements Player, Serializable {
+public class HumanPlayer implements Player {
 
     private InputStream input;
     private PrintStream output;
